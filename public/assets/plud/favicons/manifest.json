@@ -1,0 +1,245 @@
+{
+  "assets": [
+    {
+      "contentType": "image/png",
+      "id": "91fbf183c8300920",
+      "kind": "image",
+      "name": "icon-ios.77d25eba.png",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/91fbf183c8300920.png",
+      "url": "https://abs.twimg.com/responsive-web/client-web/icon-ios.77d25eba.png"
+    },
+    {
+      "contentType": "image/png",
+      "id": "4ca5ba567de1c9d0",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/4ca5ba567de1c9d0",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Fswitch-to-codex.openai.chatgpt.site&sz=256"
+    },
+    {
+      "contentType": "image/png",
+      "id": "bbc6ba6b0621bd81",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/bbc6ba6b0621bd81",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Fhilos.sh&sz=256"
+    },
+    {
+      "contentType": "image/jpeg",
+      "id": "3a2770773e25e2ce",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/3a2770773e25e2ce",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Fdqnamo.com&sz=256"
+    },
+    {
+      "contentType": "image/png",
+      "id": "904487923090b763",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/904487923090b763",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Fdevouringdetails.com&sz=256"
+    },
+    {
+      "contentType": "image/png",
+      "id": "540005d0481190b2",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/540005d0481190b2",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Fconvex-umber-ten.vercel.app&sz=256"
+    },
+    {
+      "contentType": "image/png",
+      "id": "0490a6a8389dfa8a",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/0490a6a8389dfa8a",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Ftransitions.dev&sz=256"
+    },
+    {
+      "contentType": "image/jpeg",
+      "id": "632f93cb57bfb531",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/632f93cb57bfb531",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Fhighlighte.rs&sz=256"
+    },
+    {
+      "contentType": "image/png",
+      "id": "fdc7f31bda19cfe7",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/fdc7f31bda19cfe7",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Fdeadsimplesites.com&sz=256"
+    },
+    {
+      "contentType": "image/png",
+      "id": "4dce05c22f132b80",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/4dce05c22f132b80",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Farlan.me&sz=256"
+    },
+    {
+      "contentType": "image/png",
+      "id": "7e03478fb17552ba",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/7e03478fb17552ba",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Fwrdmrks.com&sz=256"
+    },
+    {
+      "contentType": "image/png",
+      "id": "b8b2b2a3d21e8e67",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/b8b2b2a3d21e8e67",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Fmockdown.design&sz=256"
+    },
+    {
+      "contentType": "image/png",
+      "id": "cdc254b8e07d00a0",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/cdc254b8e07d00a0",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Fshu-gallery.vercel.app&sz=256"
+    },
+    {
+      "contentType": "image/png",
+      "id": "629777a6c1435923",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/629777a6c1435923",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Fsuper-hover.danielpetho.com&sz=256"
+    },
+    {
+      "contentType": "image/png",
+      "id": "d4a939827176c128",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/d4a939827176c128",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Fbestdesignsonx.com&sz=256"
+    },
+    {
+      "contentType": "image/png",
+      "id": "6f4964af98d1988f",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/6f4964af98d1988f",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Fcuelume-site.pages.dev&sz=256"
+    },
+    {
+      "contentType": "image/png",
+      "id": "07f00a05e13c9fa4",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/07f00a05e13c9fa4",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Fultramock.io&sz=256"
+    },
+    {
+      "contentType": "image/png",
+      "id": "be847b0762cf7438",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/be847b0762cf7438",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Fai-interaction.com&sz=256"
+    },
+    {
+      "contentType": "image/png",
+      "id": "b5db10f5b2bd2504",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/b5db10f5b2bd2504",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Fbuninux.com&sz=256"
+    },
+    {
+      "contentType": "image/png",
+      "id": "f8b33d3569569705",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/f8b33d3569569705",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Frecent.design&sz=256"
+    },
+    {
+      "contentType": "image/jpeg",
+      "id": "b0dc537a8c492ab0",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/b0dc537a8c492ab0",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Fframer.com&sz=256"
+    },
+    {
+      "contentType": "image/png",
+      "id": "5da1a29cda45232f",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/5da1a29cda45232f",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Fdanmall.com&sz=256"
+    },
+    {
+      "contentType": "image/png",
+      "id": "51b6fbc77ebd9be5",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/51b6fbc77ebd9be5",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Fcodexbar.app&sz=256"
+    },
+    {
+      "contentType": "image/png",
+      "id": "687f40e1341aea66",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/687f40e1341aea66",
+      "url": "https://www.google.com/s2/favicons?domain_url=https%3A%2F%2Faside.com&sz=256"
+    },
+    {
+      "contentType": "image/png",
+      "id": "112606c296033935",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/112606c296033935",
+      "url": "https://www.google.com/s2/favicons?domain=switch-to-codex.openai.chatgpt.site&sz=64"
+    },
+    {
+      "contentType": "image/png",
+      "id": "69568f9404d11d74",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/69568f9404d11d74",
+      "url": "https://www.google.com/s2/favicons?domain=mockdown.design&sz=64"
+    },
+    {
+      "contentType": "image/png",
+      "id": "48eb5d776c3aaef3",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/48eb5d776c3aaef3",
+      "url": "https://www.google.com/s2/favicons?domain=cuelume-site.pages.dev&sz=64"
+    },
+    {
+      "contentType": "image/png",
+      "id": "4ea5a3830b0c9e1a",
+      "kind": "image",
+      "name": "favicons",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/4ea5a3830b0c9e1a",
+      "url": "https://www.google.com/s2/favicons?domain=recent.design&sz=64"
+    },
+    {
+      "contentType": "image/svg+xml",
+      "id": "2e8903016704c0fc",
+      "kind": "image",
+      "name": "svg-1",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/2e8903016704c0fc.svg",
+      "url": "inline-svg:2e8903016704c0fc"
+    },
+    {
+      "contentType": "image/svg+xml",
+      "id": "64df70dea24ddbf2",
+      "kind": "image",
+      "name": "svg-2",
+      "path": "/var/folders/lc/9dm60lh54z99mqph04lxmvw00000gp/T/browser-use/assets/9e07fdb4-05e3-4cfd-90d1-ae86fe931ea9/64df70dea24ddbf2.svg",
+      "url": "inline-svg:64df70dea24ddbf2"
+    }
+  ],
+  "failures": []
+}

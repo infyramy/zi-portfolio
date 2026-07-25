@@ -1,0 +1,21 @@
+{
+  "name": "site",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate:activity": "node scripts/generate-codex-activity.mjs",
+    "predev": "npm run generate:activity",
+    "dev": "vite",
+    "prebuild": "npm run generate:activity",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "5.0.4",
+    "lenis": "^1.3.25",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "vite": "6.4.2"
+  }
+}
