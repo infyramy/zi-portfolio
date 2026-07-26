@@ -276,6 +276,7 @@ function WorkReel({ items, label }) {
     media.closest(".work-slide")?.style.setProperty("--media-ratio", width / height);
   };
   const down = (event) => {
+    if (window.matchMedia("(max-width: 700px), (pointer: coarse)").matches) return;
     cancelAnimationFrame(frameRef.current);
     state.current = { start:event.clientX, origin:offsetRef.current, dragging:true, lastX:event.clientX, lastTime:performance.now(), velocity:0 };
     setDragging(true);
@@ -322,6 +323,28 @@ function WorkReel({ items, label }) {
   </section>;
 }
 
+function ActivityCalendar({ activity, children, label }) {
+  const months = [];
+  let previousMonth = "";
+  activity.days.forEach(day => {
+    const month = day.date.slice(5,7);
+    if (month === previousMonth) return;
+    previousMonth = month;
+    months.push({
+      label:new Intl.DateTimeFormat("en", { month:"short", timeZone:"UTC" }).format(new Date(`${day.date}T00:00:00Z`)),
+      week:day.week,
+    });
+  });
+  return <div className="activity-grid-scroll" tabIndex="0" aria-label={label}>
+    <div className="activity-calendar" style={{"--activity-weeks":activity.totalWeeks}}>
+      <div className="activity-months" aria-hidden="true">
+        {months.map(month => <span style={{gridColumn:month.week + 1}} key={`${month.label}-${month.week}`}>{month.label}</span>)}
+      </div>
+      {children}
+    </div>
+  </div>;
+}
+
 function CodexActivity() {
   const tools = {
     codex: { label:"Codex", source:"Sessions recorded across tools" },
@@ -343,7 +366,7 @@ function CodexActivity() {
   return <section className={`codex-activity page-column tool-${tool}`} aria-labelledby="activity-tool-title" data-motion="grid">
     <div className="codex-activity-head">
       <div>
-        <h3 id="activity-tool-title">A year of making</h3>
+        <h3 id="activity-tool-title">AI-assisted work log</h3>
         <p>{selected ? selected.source : "Sessions recorded across tools"}</p>
       </div>
       <p>{selected ? `${selectedActivity.total} sessions recorded` : `${total} sessions recorded`}</p>
@@ -354,16 +377,14 @@ function CodexActivity() {
           {key !== "all" && <span className="tool-option-mark" aria-hidden="true"/>}{label}
         </button>)}
     </div>
-    {tool === "all" && <div className="activity-grid-scroll" tabIndex="0" aria-label="Scrollable combined activity grid"><div className="activity-grid activity-grid-mixed" style={{"--activity-weeks":codexActivity.tools.codex.totalWeeks}} role="img" aria-label="Combined activity sessions across Codex, Claude Code, and Antigravity in 2026">{combinedDays.map(day => <span className={`activity-cell activity-cell-mixed active-${day.colours.length}`} key={day.date} style={{gridColumn:day.week + 1,gridRow:day.weekday + 1,"--mix-a":day.colours[0] || "transparent","--mix-b":day.colours[1] || "transparent","--mix-c":day.colours[2] || "transparent"}} title={`${day.date}: Codex ${day.counts.codex}, Claude Code ${day.counts.claude}, Antigravity ${day.counts.antigravity}`} aria-hidden="true"/>)}</div></div>}
+    {tool === "all" && <ActivityCalendar activity={codexActivity.tools.codex} label="Scrollable combined activity grid"><div className="activity-grid activity-grid-mixed" role="img" aria-label="Combined activity sessions across Codex, Claude Code, and Antigravity in 2026">{combinedDays.map(day => <span className={`activity-cell activity-cell-mixed active-${day.colours.length}`} key={day.date} style={{gridColumn:day.week + 1,gridRow:day.weekday + 1,"--mix-a":day.colours[0] || "transparent","--mix-b":day.colours[1] || "transparent","--mix-c":day.colours[2] || "transparent"}} title={`${day.date}: Codex ${day.counts.codex}, Claude Code ${day.counts.claude}, Antigravity ${day.counts.antigravity}`} aria-hidden="true"/>)}</div></ActivityCalendar>}
     {tool !== "all" && <div className="activity-views">
       {visibleTools.map(key => {
         const activity = codexActivity.tools[key];
-        return <div className={`activity-view tool-${key}`} key={key}><div className="activity-grid-scroll" tabIndex="0" aria-label={`Scrollable ${tools[key].label} activity grid`}><div className="activity-grid" style={{"--activity-weeks":activity.totalWeeks}} role="img" aria-label={`${activity.total} ${tools[key].label} sessions in ${activity.year}`}>{activity.days.map(day=><span className={`activity-cell level-${day.level}`} key={day.date} style={{gridColumn:day.week + 1,gridRow:day.weekday + 1}} title={`${day.date}: ${day.count} session${day.count === 1 ? "" : "s"}`} aria-hidden="true"/>)}</div></div></div>;
+        return <div className={`activity-view tool-${key}`} key={key}><ActivityCalendar activity={activity} label={`Scrollable ${tools[key].label} activity grid`}><div className="activity-grid" role="img" aria-label={`${activity.total} ${tools[key].label} sessions in ${activity.year}`}>{activity.days.map(day=><span className={`activity-cell level-${day.level}`} key={day.date} style={{gridColumn:day.week + 1,gridRow:day.weekday + 1}} title={`${day.date}: ${day.count} session${day.count === 1 ? "" : "s"}`} aria-hidden="true"/>)}</div></ActivityCalendar></div>;
       })}
     </div>}
-    {tool !== "all" && <>
-      <div className="activity-legend" aria-hidden="true"><span>Less</span>{[0,1,2,3,4].map(level=><i className={`activity-cell level-${level}`} key={level}/>)}<span>More</span></div>
-    </>}
+    <div className={`activity-legend ${tool === "all" ? "activity-legend-mixed" : ""}`} aria-hidden="true"><span>Less</span>{[0,1,2,3,4].map(level=><i className={`activity-cell level-${level}`} key={level}/>)}<span>More</span></div>
   </section>;
 }
 
@@ -407,6 +428,7 @@ function SesiFotoFeature() {
 function Home() {
   const heroIllustrationRef = useRef(null);
   const [showScrollRibbon, setShowScrollRibbon] = useState(false);
+  const [chatMode, setChatMode] = useState(false);
   const [ribbonShooting, setRibbonShooting] = useState(false);
   const [ribbonStaticShot, setRibbonStaticShot] = useState(false);
   const [cameraFlash, setCameraFlash] = useState(0);
@@ -441,6 +463,40 @@ function Home() {
     window.clearTimeout(cameraResetTimerRef.current);
   }, []);
 
+  useEffect(() => {
+    document.body.classList.toggle("chat-mode", chatMode);
+    return () => document.body.classList.remove("chat-mode");
+  }, [chatMode]);
+  useEffect(() => {
+    const mobileQuery = window.matchMedia("(max-width: 700px)");
+    const updateChatMode = () => {
+      if (!mobileQuery.matches) {
+        setChatMode(false);
+        return;
+      }
+      const section = document.querySelector(".conversation-section");
+      if (!section) return;
+      const bounds = section.getBoundingClientRect();
+      setChatMode(bounds.top <= window.innerHeight * .12 && bounds.bottom >= window.innerHeight * .88);
+    };
+    window.addEventListener("scroll", updateChatMode, { passive:true });
+    document.addEventListener("scroll", updateChatMode, { passive:true, capture:true });
+    window.addEventListener("resize", updateChatMode);
+    mobileQuery.addEventListener("change", updateChatMode);
+    const section = document.querySelector(".conversation-section");
+    const chatObserver = section ? new IntersectionObserver(updateChatMode, { threshold:[0,.72,.9] }) : null;
+    if (section) chatObserver.observe(section);
+    const initialCheck = window.setTimeout(updateChatMode, 180);
+    return () => {
+      window.clearTimeout(initialCheck);
+      window.removeEventListener("scroll", updateChatMode);
+      document.removeEventListener("scroll", updateChatMode, { capture:true });
+      window.removeEventListener("resize", updateChatMode);
+      mobileQuery.removeEventListener("change", updateChatMode);
+      chatObserver?.disconnect();
+    };
+  }, []);
+
   const takeRibbonPhoto = () => {
     if (ribbonShooting) return;
     window.clearTimeout(cameraFlashTimerRef.current);
@@ -457,13 +513,13 @@ function Home() {
   return <main className="home-page">
     <button
       type="button"
-      className={`scroll-ribbon ${showScrollRibbon ? "is-visible" : ""} ${ribbonShooting ? "is-shooting" : ""}`}
+      className={`scroll-ribbon ${showScrollRibbon || chatMode ? "is-visible" : ""} ${ribbonShooting ? "is-shooting" : ""} ${chatMode ? "chat-avatar" : ""}`}
       onClick={takeRibbonPhoto}
-      disabled={!showScrollRibbon}
-      aria-label="Take a photo"
-      title="Take a photo"
+      disabled={!showScrollRibbon || chatMode}
+      aria-label={chatMode ? "Zahirul Iman" : "Take a photo"}
+      title={chatMode ? undefined : "Take a photo"}
     >
-      <span className="scroll-ribbon-mark"><img key={ribbonShooting ? "camera-motion" : "head"} src={ribbonShooting ? (ribbonStaticShot ? "/assets/zahirul/zahirul-camera-head-ribbon.png" : "/assets/zahirul/zahirul-camera-motion-v2.webp") : "/assets/zahirul/zahirul-head.png"} alt=""/></span>
+      <span className="scroll-ribbon-mark"><img key={ribbonShooting && !chatMode ? "camera-motion" : "head"} src={ribbonShooting && !chatMode ? (ribbonStaticShot ? "/assets/zahirul/zahirul-camera-head-ribbon.png" : "/assets/zahirul/zahirul-camera-motion-v2.webp") : "/assets/zahirul/zahirul-head.png"} alt=""/></span>
     </button>
     {cameraFlash > 0 && <span className="camera-flash" key={cameraFlash} aria-hidden="true" onAnimationEnd={() => setCameraFlash(0)}/>}
     <section className="home-intro page-column" id="introduction">
@@ -482,7 +538,7 @@ function Home() {
     <section className="experiment-section" id="experiments"><div className="page-column experiment-intro" data-motion="copy"><h2>Made out of curiosity</h2><p>I test AI, visual concepts, branding, rapid prototypes, interfaces, workflows, and new tools almost daily — mainly to understand what is possible before deciding what is actually useful.</p></div><WorkReel items={experimentHighlights} label="Creative experiments"/><CodexActivity/></section>
     <section className="infyra-chapter" id="infyra"><div className="story-section infyra-section page-column" data-motion="copy"><div><h2>Built together</h2><p className="section-lead"><strong>Infyra is our three-person side venture for building real things.</strong></p><a className="infyra-site-link" href="https://infyra.my/" target="_blank" rel="noreferrer">Visit infyra.my <span aria-hidden="true">↗</span></a></div><div className="infyra-copy"><p>A small three-person studio I co-run alongside my main career. It gives us room to build selected digital products, websites, business systems, and client solutions, starting with the problem rather than the technology.</p><p>My role moves between product direction, UI/UX, prototyping, client discovery, project structure, and helping make the idea clear enough for the team to build.</p><blockquote>“Discuss first. Build only what makes sense.”</blockquote><p>Understand the real problem first. Build only the digital layer that is genuinely useful.</p></div></div><SesiFotoFeature/></section>
     <section className="photography-section" id="photography"><div className="page-column photography-intro" data-motion="copy"><div><h2>Life through a lens</h2><p className="section-lead"><strong>Pelatography is my photography identity, active since 2016.</strong></p></div><p>It started during university and never really left. These days I shoot mostly part-time — usually weddings and weekend assignments, often freelancing with different photography teams and studios. Pelatography remains my personal photography identity, rather than a full-time studio operation.</p></div><PhotographyGear/><WorkReel items={photographyHighlights} label="Pelatography work"/></section>
-    <Conversation/>
+    <Conversation mobileChatActive={chatMode} onMobileModeChange={setChatMode}/>
     <Footer/>
   </main>;
 }
@@ -692,16 +748,29 @@ function chatTime(date = new Date()) {
   };
 }
 
-function Conversation(){
+function Conversation({ mobileChatActive, onMobileModeChange }) {
   const [messages, setMessages] = useState(() => [{ id:0, side:"incoming", text:"Hey, what do you want to know? Pick one first.", time:chatTime() }]);
   const [options, setOptions] = useState(CHAT_MAIN_OPTIONS);
   const [typing, setTyping] = useState(false);
+  const [showExitHint, setShowExitHint] = useState(false);
   const transcriptRef = useRef(null);
   const seen = useRef(new Set());
   const timerRef = useRef(null);
+  const hintTimerRef = useRef(null);
+  const hintSeenRef = useRef(false);
   const nextId = useRef(1);
 
-  useEffect(() => () => window.clearTimeout(timerRef.current), []);
+  useEffect(() => () => {
+    window.clearTimeout(timerRef.current);
+    window.clearTimeout(hintTimerRef.current);
+  }, []);
+  useEffect(() => {
+    if (!mobileChatActive || hintSeenRef.current) return;
+    hintSeenRef.current = true;
+    setShowExitHint(true);
+    window.clearTimeout(hintTimerRef.current);
+    hintTimerRef.current = window.setTimeout(() => setShowExitHint(false), 4200);
+  }, [mobileChatActive]);
   useEffect(() => {
     const transcript = transcriptRef.current;
     if (!transcript) return;
@@ -734,9 +803,27 @@ function Conversation(){
 
   const showMainOptions = () => setOptions(CHAT_MAIN_OPTIONS);
   const showingMainOptions = options.length === CHAT_MAIN_OPTIONS.length && options.every((key, index) => key === CHAT_MAIN_OPTIONS[index]);
+  const remindExit = () => {
+    if (!window.matchMedia("(max-width: 700px)").matches) return;
+    setShowExitHint(true);
+    window.clearTimeout(hintTimerRef.current);
+    hintTimerRef.current = window.setTimeout(() => setShowExitHint(false), 3200);
+  };
+  const exitChat = () => {
+    onMobileModeChange?.(false);
+    document.querySelector(".chat-entry-snap")?.scrollIntoView({
+      block:"start",
+      behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+    });
+  };
 
-  return <><div className="chat-entry-snap" aria-hidden="true"/><section className="conversation-section page-column" id="contact" data-motion="chat"><h2>Start anywhere</h2>
-    <div className="chat-mobile-header" aria-hidden="true"><span className="chat-mobile-avatar"><img src="/assets/zahirul/zahirul-head.png" alt=""/></span><span><strong>Zahirul Iman</strong><small>usually replies quickly</small></span></div>
+  return <><section className="chat-entry-snap page-column" aria-label="Chat introduction"><div><p>Have something in mind?</p><h2>Start anywhere</h2><nav className="chat-entry-links" aria-label="Contact links"><a href={`mailto:${EMAIL}`}>Email</a><a href={LINKEDIN} target="_blank" rel="noreferrer">LinkedIn</a><a href={INSTAGRAM} target="_blank" rel="noreferrer">Instagram</a></nav><span>Swipe up to open a quick chat</span></div></section><section className="conversation-section page-column" id="contact" data-motion="chat"><h2>Start anywhere</h2>
+    <div className="chat-mobile-header">
+      <button type="button" className="chat-back" onClick={exitChat} aria-label="Back to portfolio">←</button>
+      <span className="chat-mobile-avatar-anchor" aria-hidden="true"><img src="/assets/zahirul/zahirul-head.png" alt=""/></span>
+      <button type="button" className="chat-mobile-identity" onClick={remindExit} aria-label="Zahirul Iman, usually replies quickly. Tap the back arrow to return to the portfolio."><strong>Zahirul Iman</strong><small>usually replies quickly</small></button>
+      {showExitHint && <span className="chat-exit-hint" role="status">Tap ← to return to the portfolio</span>}
+    </div>
     <div className="chat-shell">
     <div className="chat-transcript" aria-live="polite" aria-label="Conversation with Zahirul">
       <div className="chat-messages" ref={transcriptRef} data-lenis-prevent>
