@@ -767,9 +767,11 @@ function Conversation({ mobileChatActive, onMobileModeChange }) {
   useEffect(() => {
     if (!mobileChatActive || hintSeenRef.current) return;
     hintSeenRef.current = true;
-    setShowExitHint(true);
     window.clearTimeout(hintTimerRef.current);
-    hintTimerRef.current = window.setTimeout(() => setShowExitHint(false), 4200);
+    hintTimerRef.current = window.setTimeout(() => {
+      setShowExitHint(true);
+      hintTimerRef.current = window.setTimeout(() => setShowExitHint(false), 7000);
+    }, 280);
   }, [mobileChatActive]);
   useEffect(() => {
     const transcript = transcriptRef.current;
