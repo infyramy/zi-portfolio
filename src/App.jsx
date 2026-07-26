@@ -472,10 +472,27 @@ function Home() {
     <PastWork/>
     <section className="experiment-section" id="experiments"><div className="page-column experiment-intro" data-motion="copy"><h2>Always experimenting</h2><p>I test AI, visual concepts, branding, rapid prototypes, interfaces, workflows, and new tools almost daily — mainly to understand what is possible before deciding what is actually useful.</p></div><WorkReel items={experimentHighlights} label="Creative experiments"/><CodexActivity/></section>
     <section className="infyra-chapter" id="infyra"><div className="story-section infyra-section page-column" data-motion="copy"><div><h2>Infyra Ventures</h2><p className="section-lead"><strong>My side venture for building real things.</strong></p><a className="infyra-site-link" href="https://infyra.my/" target="_blank" rel="noreferrer">infyra.my <span aria-hidden="true">↗</span></a></div><div className="infyra-copy"><p>A small three-person studio I co-run alongside my main career. It gives us room to build selected digital products, websites, business systems, and client solutions, starting with the problem rather than the technology.</p><p>My role moves between product direction, UI/UX, prototyping, client discovery, project structure, and helping make the idea clear enough for the team to build.</p><blockquote>“Discuss first. Build only what makes sense.”</blockquote><p>Understand the real problem first. Build only the digital layer that is genuinely useful.</p></div></div><SesiFotoFeature/></section>
-    <section className="photography-section" id="photography"><div className="page-column photography-intro" data-motion="copy"><div><h2>Pelatography</h2><p className="section-lead"><strong>Photography, since 2016.</strong></p></div><p>It started during university and never really left. These days I shoot mostly part-time — usually weddings and weekend assignments, often freelancing with different photography teams and studios. Pelatography remains my personal photography identity, rather than a full-time studio operation.</p></div><WorkReel items={photographyHighlights} label="Pelatography work"/></section>
+    <section className="photography-section" id="photography"><div className="page-column photography-intro" data-motion="copy"><div><h2>Pelatography</h2><p className="section-lead"><strong>Photography, since 2016.</strong></p></div><p>It started during university and never really left. These days I shoot mostly part-time — usually weddings and weekend assignments, often freelancing with different photography teams and studios. Pelatography remains my personal photography identity, rather than a full-time studio operation.</p></div><PhotographyGear/><WorkReel items={photographyHighlights} label="Pelatography work"/></section>
     <Conversation/>
     <Footer/>
   </main>;
+}
+
+function PhotographyGear(){
+  const focalMarks = [{label:"24",position:0},{label:"35",position:18},{label:"70",position:75},{label:"85",position:100}];
+  return <aside className="photography-gear page-column" aria-labelledby="photography-gear-title" data-motion="copy">
+    <div className="gear-heading">
+      <h3 id="photography-gear-title">In the bag</h3>
+      <div className="gear-focal-scale" aria-hidden="true">
+        {focalMarks.map(mark=><span className="gear-focal-mark" style={{"--focal-position":`${mark.position}%`}} key={mark.label}>{mark.label}</span>)}
+      </div>
+    </div>
+    <dl className="gear-list">
+      <div><dt>Body</dt><dd>Sony α7 III</dd></div>
+      <div><dt>Glass</dt><dd>Sony FE 35mm f/1.8 <i/> Sony FE 85mm f/1.8 <i/> Sigma 24–70mm f/2.8</dd></div>
+      <div><dt>Light</dt><dd>Godox TT685 <i/> Godox TT600 ×2</dd></div>
+    </dl>
+  </aside>;
 }
 
 function PastWork(){const items=[
