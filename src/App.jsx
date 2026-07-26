@@ -82,7 +82,7 @@ function InternalLink({ href, children, className, onNavigate }) {
   return <a href={href} className={className} onClick={navigate}>{children}</a>;
 }
 
-function SectionLink({ id, title, detail, onNavigate }) {
+function SectionLink({ id, title, onNavigate }) {
   const href = `/#${id}`;
   const navigate = (event) => {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || window.location.pathname !== "/") return;
@@ -96,7 +96,7 @@ function SectionLink({ id, title, detail, onNavigate }) {
       else target.scrollIntoView({ behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"start" });
     });
   };
-  return <a href={href} onClick={navigate}><span className="menu-link-copy"><strong>{title}</strong><small>{detail}</small></span><span className="menu-link-mark" aria-hidden="true">↘</span></a>;
+  return <a href={href} onClick={navigate}>{title}</a>;
 }
 
 function SiteChrome({ route }) {
@@ -167,15 +167,14 @@ function SiteChrome({ route }) {
     </header>
     <div id="site-menu" className={`site-menu ${menuOpen ? "is-open" : ""}`} aria-hidden={!menuOpen} inert={!menuOpen}>
       <div className="menu-shell">
-        <div className="menu-intro"><strong>Explore the portfolio</strong><span>Zahirul Iman · Product Designer &amp; Digital Product Builder</span></div>
         <nav className="menu-nav" aria-label="Primary navigation">
-          <SectionLink id="introduction" title="About & approach" detail="What I do and how I think about products" onNavigate={close}/>
-          <SectionLink id="work-highlights" title="Selected product & digital work" detail="Interfaces, websites and systems" onNavigate={close}/>
-          <SectionLink id="past-work" title="More projects, at a glance" detail="A compact index of recent work" onNavigate={close}/>
-          <SectionLink id="experiments" title="Experiments & AI-assisted building" detail="Prototypes, explorations and activity" onNavigate={close}/>
-          <SectionLink id="infyra" title="Products built with Infyra" detail="Our three-person side venture" onNavigate={close}/>
-          <SectionLink id="photography" title="Wedding photography & camera kit" detail="Pelatography, active since 2016" onNavigate={close}/>
-          <SectionLink id="contact" title="Questions, work & contact" detail="Quick answers or start a conversation" onNavigate={close}/>
+          <SectionLink id="introduction" title="About" onNavigate={close}/>
+          <SectionLink id="work-highlights" title="Selected work" onNavigate={close}/>
+          <SectionLink id="past-work" title="Project archive" onNavigate={close}/>
+          <SectionLink id="experiments" title="Experiments" onNavigate={close}/>
+          <SectionLink id="infyra" title="Built together" onNavigate={close}/>
+          <SectionLink id="photography" title="Photography" onNavigate={close}/>
+          <SectionLink id="contact" title="Say hello" onNavigate={close}/>
         </nav>
         <div className="menu-footer">
           <div className="menu-contact">
@@ -217,7 +216,7 @@ function SocialLinks({ includeGitHub = false }) {
 
 function WhatIWorkWith() {
   return <section className="capabilities-section page-column" id="capabilities" aria-labelledby="capabilities-title" data-motion="list">
-    <div className="section-heading"><h2 id="capabilities-title">Tools behind the work</h2></div>
+    <div className="section-heading"><h2 id="capabilities-title">What’s in rotation</h2></div>
     <ul className="capability-list">
       {capabilityGroups.map((group,index)=><li className="capability-row" key={group.title} style={{"--motion-index":index}}>
         <h3>{group.title}</h3>
@@ -344,7 +343,7 @@ function CodexActivity() {
   return <section className={`codex-activity page-column tool-${tool}`} aria-labelledby="activity-tool-title" data-motion="grid">
     <div className="codex-activity-head">
       <div>
-        <h3 id="activity-tool-title">AI-assisted building activity</h3>
+        <h3 id="activity-tool-title">A year of making</h3>
         <p>{selected ? selected.source : "Sessions recorded across tools"}</p>
       </div>
       <p>{selected ? `${selectedActivity.total} sessions recorded` : `${total} sessions recorded`}</p>
@@ -477,12 +476,12 @@ function Home() {
       <SocialLinks/>
     </section>
     <WhatIWorkWith/>
-    <section className="section-heading page-column" id="work-highlights" data-motion="copy"><h2>Selected product &amp; digital work</h2><p>A closer look at products, interfaces, websites and systems I helped shape.</p></section>
+    <section className="section-heading page-column" id="work-highlights" data-motion="copy"><h2>A few things worth showing</h2><p>A closer look at products, interfaces, websites and systems I helped shape.</p></section>
     <WorkReel items={workHighlights} label="Work highlights"/>
     <PastWork/>
-    <section className="experiment-section" id="experiments"><div className="page-column experiment-intro" data-motion="copy"><h2>Experiments, prototypes &amp; new ideas</h2><p>I test AI, visual concepts, branding, rapid prototypes, interfaces, workflows, and new tools almost daily — mainly to understand what is possible before deciding what is actually useful.</p></div><WorkReel items={experimentHighlights} label="Creative experiments"/><CodexActivity/></section>
-    <section className="infyra-chapter" id="infyra"><div className="story-section infyra-section page-column" data-motion="copy"><div><h2>Products built with Infyra</h2><p className="section-lead"><strong>A three-person side venture for building real things.</strong></p><a className="infyra-site-link" href="https://infyra.my/" target="_blank" rel="noreferrer">Visit infyra.my <span aria-hidden="true">↗</span></a></div><div className="infyra-copy"><p>A small three-person studio I co-run alongside my main career. It gives us room to build selected digital products, websites, business systems, and client solutions, starting with the problem rather than the technology.</p><p>My role moves between product direction, UI/UX, prototyping, client discovery, project structure, and helping make the idea clear enough for the team to build.</p><blockquote>“Discuss first. Build only what makes sense.”</blockquote><p>Understand the real problem first. Build only the digital layer that is genuinely useful.</p></div></div><SesiFotoFeature/></section>
-    <section className="photography-section" id="photography"><div className="page-column photography-intro" data-motion="copy"><div><h2>Wedding photography &amp; camera kit</h2><p className="section-lead"><strong>Pelatography, since 2016.</strong></p></div><p>It started during university and never really left. These days I shoot mostly part-time — usually weddings and weekend assignments, often freelancing with different photography teams and studios. Pelatography remains my personal photography identity, rather than a full-time studio operation.</p></div><PhotographyGear/><WorkReel items={photographyHighlights} label="Pelatography work"/></section>
+    <section className="experiment-section" id="experiments"><div className="page-column experiment-intro" data-motion="copy"><h2>Made out of curiosity</h2><p>I test AI, visual concepts, branding, rapid prototypes, interfaces, workflows, and new tools almost daily — mainly to understand what is possible before deciding what is actually useful.</p></div><WorkReel items={experimentHighlights} label="Creative experiments"/><CodexActivity/></section>
+    <section className="infyra-chapter" id="infyra"><div className="story-section infyra-section page-column" data-motion="copy"><div><h2>Built together</h2><p className="section-lead"><strong>Infyra is our three-person side venture for building real things.</strong></p><a className="infyra-site-link" href="https://infyra.my/" target="_blank" rel="noreferrer">Visit infyra.my <span aria-hidden="true">↗</span></a></div><div className="infyra-copy"><p>A small three-person studio I co-run alongside my main career. It gives us room to build selected digital products, websites, business systems, and client solutions, starting with the problem rather than the technology.</p><p>My role moves between product direction, UI/UX, prototyping, client discovery, project structure, and helping make the idea clear enough for the team to build.</p><blockquote>“Discuss first. Build only what makes sense.”</blockquote><p>Understand the real problem first. Build only the digital layer that is genuinely useful.</p></div></div><SesiFotoFeature/></section>
+    <section className="photography-section" id="photography"><div className="page-column photography-intro" data-motion="copy"><div><h2>Life through a lens</h2><p className="section-lead"><strong>Pelatography is my photography identity, active since 2016.</strong></p></div><p>It started during university and never really left. These days I shoot mostly part-time — usually weddings and weekend assignments, often freelancing with different photography teams and studios. Pelatography remains my personal photography identity, rather than a full-time studio operation.</p></div><PhotographyGear/><WorkReel items={photographyHighlights} label="Pelatography work"/></section>
     <Conversation/>
     <Footer/>
   </main>;
@@ -511,7 +510,7 @@ function PastWork(){const items=[
   {type:"System",title:"Innogauge",description:"Analytics system; I simplified complex information into practical product screens."},
   {type:"Website",title:"Peraduan Sunshine",description:"Campaign website; I structured the participation flow and supporting interface."},
   {type:"Website",title:"The Tulip Wedding",description:"Wedding website; I shaped a polished browsing and enquiry journey.",href:"https://thetulipwedding.com/"},
-];return <section className="story-section past-work page-column" id="past-work" data-motion="list"><div className="section-heading"><h2>More projects, at a glance</h2></div><div className="project-index"><div className="project-index-head" aria-hidden="true"><span>Type</span><span>Project</span><span/></div>{items.map((item,index)=>{const content=<><span className="project-type">{item.type}</span><span className="project-summary"><strong>{item.title}</strong><span>{item.description}</span></span><span className="project-arrow" aria-hidden="true">{item.href?"↗":"→"}</span></>;const style={"--motion-index":index};return item.href?<a className="project-row" href={item.href} target="_blank" rel="noreferrer" key={item.title} style={style}>{content}</a>:<div className="project-row" key={item.title} style={style}>{content}</div>})}</div></section>}
+];return <section className="story-section past-work page-column" id="past-work" data-motion="list"><div className="section-heading"><h2>Also on the shelf</h2></div><div className="project-index"><div className="project-index-head" aria-hidden="true"><span>Type</span><span>Project</span><span/></div>{items.map((item,index)=>{const content=<><span className="project-type">{item.type}</span><span className="project-summary"><strong>{item.title}</strong><span>{item.description}</span></span><span className="project-arrow" aria-hidden="true">{item.href?"↗":"→"}</span></>;const style={"--motion-index":index};return item.href?<a className="project-row" href={item.href} target="_blank" rel="noreferrer" key={item.title} style={style}>{content}</a>:<div className="project-row" key={item.title} style={style}>{content}</div>})}</div></section>}
 
 const portfolioSections = [
   { title:"Projects", items:[
@@ -736,7 +735,7 @@ function Conversation(){
   const showMainOptions = () => setOptions(CHAT_MAIN_OPTIONS);
   const showingMainOptions = options.length === CHAT_MAIN_OPTIONS.length && options.every((key, index) => key === CHAT_MAIN_OPTIONS[index]);
 
-  return <><div className="chat-entry-snap" aria-hidden="true"/><section className="conversation-section page-column" id="contact" data-motion="chat"><h2>Questions, work &amp; contact</h2>
+  return <><div className="chat-entry-snap" aria-hidden="true"/><section className="conversation-section page-column" id="contact" data-motion="chat"><h2>Start anywhere</h2>
     <div className="chat-mobile-header" aria-hidden="true"><span className="chat-mobile-avatar"><img src="/assets/zahirul/zahirul-head.png" alt=""/></span><span><strong>Zahirul Iman</strong><small>usually replies quickly</small></span></div>
     <div className="chat-shell">
     <div className="chat-transcript" aria-live="polite" aria-label="Conversation with Zahirul">
