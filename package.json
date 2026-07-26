@@ -9,6 +9,7 @@
     "dev": "vite",
     "prebuild": "npm run generate:activity",
     "build": "vite build",
+    "build:deploy": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
