@@ -170,7 +170,7 @@ function SiteChrome({ route }) {
         <nav className="menu-nav" aria-label="Primary navigation">
           <SectionLink id="introduction" title="About" onNavigate={close}/>
           <SectionLink id="work-highlights" title="Selected work" onNavigate={close}/>
-          <SectionLink id="past-work" title="Project archive" onNavigate={close}/>
+          <SectionLink id="past-work" title="Past work" onNavigate={close}/>
           <SectionLink id="experiments" title="Experiments" onNavigate={close}/>
           <SectionLink id="infyra" title="Built together" onNavigate={close}/>
           <SectionLink id="photography" title="Photography" onNavigate={close}/>
@@ -476,7 +476,7 @@ function Home() {
       <SocialLinks/>
     </section>
     <WhatIWorkWith/>
-    <section className="section-heading page-column" id="work-highlights" data-motion="copy"><h2>A few things worth showing</h2><p>A closer look at products, interfaces, websites and systems I helped shape.</p></section>
+    <section className="section-heading page-column" id="work-highlights" data-motion="copy"><h2>Selected work</h2><p>A closer look at products, interfaces, websites and systems I helped shape.</p></section>
     <WorkReel items={workHighlights} label="Work highlights"/>
     <PastWork/>
     <section className="experiment-section" id="experiments"><div className="page-column experiment-intro" data-motion="copy"><h2>Made out of curiosity</h2><p>I test AI, visual concepts, branding, rapid prototypes, interfaces, workflows, and new tools almost daily — mainly to understand what is possible before deciding what is actually useful.</p></div><WorkReel items={experimentHighlights} label="Creative experiments"/><CodexActivity/></section>
@@ -506,11 +506,11 @@ function PhotographyGear(){
 
 function PastWork(){const items=[
   {type:"Website",title:"Calm & Chaos",description:"Event booking website; I shaped its interface, visual direction, and customer flow.",href:"https://calmandchaos.asia/book"},
-  {type:"Design",title:"ZASSApp",description:"Mobile product concept; I translated requirements into clearer flows and UI direction."},
-  {type:"System",title:"Innogauge",description:"Analytics system; I simplified complex information into practical product screens."},
-  {type:"Website",title:"Peraduan Sunshine",description:"Campaign website; I structured the participation flow and supporting interface."},
-  {type:"Website",title:"The Tulip Wedding",description:"Wedding website; I shaped a polished browsing and enquiry journey.",href:"https://thetulipwedding.com/"},
-];return <section className="story-section past-work page-column" id="past-work" data-motion="list"><div className="section-heading"><h2>Also on the shelf</h2></div><div className="project-index"><div className="project-index-head" aria-hidden="true"><span>Type</span><span>Project</span><span/></div>{items.map((item,index)=>{const content=<><span className="project-type">{item.type}</span><span className="project-summary"><strong>{item.title}</strong><span>{item.description}</span></span><span className="project-arrow" aria-hidden="true">{item.href?"↗":"→"}</span></>;const style={"--motion-index":index};return item.href?<a className="project-row" href={item.href} target="_blank" rel="noreferrer" key={item.title} style={style}>{content}</a>:<div className="project-row" key={item.title} style={style}>{content}</div>})}</div></section>}
+  {type:"Website",title:"The Tulip Wedding",description:"Wedding website; I designed a polished browsing and enquiry experience.",href:"https://thetulipwedding.com/"},
+  {type:"Website",title:"Sunshine Raya Contest Submission",description:"Public campaign entry website; I adapted the campaign design and connected submissions and receipt photos to Google Sheets and Drive."},
+  {type:"Design",title:"Innogauge Research Interface",description:"Early research-platform collaboration; I helped shape the base UI and initial product direction for further discussion."},
+  {type:"Design",title:"ZASSApp University Super App",description:"University super-app concept; I designed the mobile experience and its supporting sub-apps."},
+];return <section className="story-section past-work page-column" id="past-work" data-motion="list"><div className="section-heading"><h2>Past work</h2></div><div className="project-index"><div className="project-index-head" aria-hidden="true"><span>Type</span><span>Project</span><span/></div>{items.map((item,index)=>{const content=<><span className="project-type">{item.type}</span><span className="project-summary"><strong>{item.title}</strong><span>{item.description}</span></span>{item.href?<span className="project-visit">Visit <span aria-hidden="true">↗</span></span>:<span/>}</>;const style={"--motion-index":index};return item.href?<a className="project-row" href={item.href} target="_blank" rel="noreferrer" key={item.title} style={style}>{content}</a>:<div className="project-row" key={item.title} style={style}>{content}</div>})}</div></section>}
 
 const portfolioSections = [
   { title:"Projects", items:[

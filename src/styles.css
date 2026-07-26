@@ -301,7 +301,7 @@ strong{font-weight:620;color:var(--ink)}
 
 .past-work{padding-top:78px;border-top:1px solid var(--line)}
 .project-index{margin-top:24px;border-top:1px solid var(--line)}
-.project-index-head,.project-row{display:grid;grid-template-columns:88px minmax(0,1fr) 22px;gap:14px;align-items:center}
+.project-index-head,.project-row{display:grid;grid-template-columns:88px minmax(0,1fr) 58px;gap:14px;align-items:center}
 .project-index-head{min-height:36px;color:var(--faint);font:500 10px/1.35 var(--font-mono);text-transform:uppercase;letter-spacing:.07em}
 .project-row{min-height:68px;margin-inline:-12px;padding:12px;border-top:1px solid var(--line);transition:background .22s,color .22s,transform .28s var(--ease-out)}
 .project-row:hover{background:var(--surface-hover);color:var(--ink);transform:translateX(4px)}
@@ -309,8 +309,10 @@ strong{font-weight:620;color:var(--ink)}
 .project-summary{display:grid;min-width:0;gap:2px}
 .project-row strong{font-size:15px;line-height:1.35;font-weight:540;color:var(--ink)}
 .project-summary>span{min-width:0;overflow:hidden;color:var(--muted);font-size:12px;line-height:1.4;text-overflow:ellipsis;white-space:nowrap}
-.project-arrow{justify-self:end;color:var(--faint);font-size:16px;transition:transform .26s var(--ease-out),color .2s}
-.project-row:hover .project-arrow{color:var(--ink);transform:translate(2px,-1px)}
+.project-visit{justify-self:end;display:inline-flex;align-items:center;gap:5px;color:var(--faint);font-size:11px;transition:color .2s}
+.project-visit span{font-size:15px;transition:transform .32s var(--ease-out)}
+.project-row:hover .project-visit{color:var(--ink)}
+.project-row:hover .project-visit span{transform:translate(3px,-3px)}
 .more-work-visual{height:38px;display:flex;align-items:center;gap:5px;color:var(--faint)}
 .more-work-visual i{width:4px;height:4px;border-radius:50%;background:currentColor}
 
@@ -572,7 +574,7 @@ strong{font-weight:620;color:var(--ink)}
   .featured-copy{grid-template-columns:1fr;gap:22px;padding:20px 14px 17px}
   .product-proof{padding-top:17px;border-top:1px solid var(--line)}
   .past-work{padding-top:62px}
-  .project-index-head,.project-row{grid-template-columns:68px minmax(0,1fr) 18px;gap:9px}
+  .project-index-head,.project-row{grid-template-columns:68px minmax(0,1fr) 46px;gap:9px}
   .project-index-head{font-size:9px}
   .project-row{min-height:68px;margin-inline:-8px;padding:11px 8px}
   .project-type{font-size:10px;line-height:1.35}
