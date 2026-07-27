@@ -65,3 +65,5 @@ The visible contact section should be the homepage’s only footer-style contact
 End the homepage with a minimal non-contact footer containing only “© 2026 Zahirul Iman” and “Product Designer & Digital Product Builder · Malaysia.” The canonical production origin used for SEO, Open Graph, structured data, robots, and sitemap files is `https://zahiruliman.com`.
 
 Use `/public/assets/zahirul/zahirul-iman-social.jpg` as the canonical 1200×630 Open Graph and Twitter sharing image. Its visual identity stays minimal: muted green-grey and off-white, with only “Zahirul Iman” and “zahiruliman.com.” Keep the absolute production URL, dimensions, JPEG MIME type, concise alt text, and matching Schema.org `ImageObject` synchronized if the asset is ever replaced.
+
+Use `iman@infyra.my` as Zahirul’s public contact email, `https://www.linkedin.com/in/zahiruliman/` as his LinkedIn profile, and `https://www.instagram.com/zahirul.iman/` (`@zahirul.iman`) as his Instagram identity everywhere, including visible contact actions, chat links, bookmarks, and structured data.

@@ -3,10 +3,10 @@ import { flushSync } from "react-dom";
 import Lenis from "lenis";
 import codexActivity from "./codex-activity.json";
 
-const EMAIL = "hello@zahiruliman.com";
-const LINKEDIN = "https://www.linkedin.com/in/zahiruliman";
+const EMAIL = "iman@infyra.my";
+const LINKEDIN = "https://www.linkedin.com/in/zahiruliman/";
 const GITHUB = "https://github.com/zahiruliman";
-const INSTAGRAM = "https://www.instagram.com/zahiruliman/";
+const INSTAGRAM = "https://www.instagram.com/zahirul.iman/";
 
 const workHighlights = [
   { title:"Calm & Chaos", context:"Event platform · Web experience", media:"/assets/zahirul/calm-and-chaos-highlight.jpg", ratio:1.992, alt:"Calm & Chaos beach race event website interface" },
