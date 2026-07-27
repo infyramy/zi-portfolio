@@ -1081,7 +1081,7 @@ function App() {
   useEffect(()=>{
     const siteUrl="https://zahiruliman.com";
     const metadata={
-      "/":{title:"Zahirul Iman – Product Designer & Digital Product Builder",description:"Portfolio of Zahirul Iman, a Malaysia-based product designer and digital product builder working across product thinking, UI/UX, rapid prototyping, websites and practical digital systems."},
+      "/":{title:"Zahirul Iman · Product Designer",description:"I design digital products, practical systems and thoughtful experiences that make sense."},
       "/product-design-engineer":{title:"Product Design – Zahirul Iman",description:"How Zahirul Iman turns unclear requirements into useful product flows, interfaces and testable prototypes."},
       "/playground":{title:"Experiments – Zahirul Iman",description:"Interactive product, interface and visual experiments by Zahirul Iman."},
       "/bookmarks":{title:"Contact & Links – Zahirul Iman",description:"Contact Zahirul Iman through email, LinkedIn or Instagram."},
