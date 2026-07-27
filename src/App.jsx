@@ -284,9 +284,9 @@ function WorkReel({ items, label }) {
   const [wheelActive, setWheelActive] = useState(false);
   const [preview, setPreview] = useState(null);
   const clamp = (value) => {
-    const columnWidth = Math.min(640, window.innerWidth - 32);
-    const startInset = Math.max(16, (window.innerWidth - columnWidth) / 2);
-    const overflow = Math.max(0, (trackRef.current?.scrollWidth || 0) - window.innerWidth + startInset);
+    const track = trackRef.current;
+    const lastSlideWidth = track?.lastElementChild?.getBoundingClientRect().width || 0;
+    const overflow = Math.max(0, (track?.scrollWidth || 0) - lastSlideWidth);
     return Math.max(-overflow, Math.min(0, value));
   };
   const moveTo = (value) => {
