@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <style>
+    .surface{fill:#f7f7f4}
+    .mark{fill:#111}
+    @media (prefers-color-scheme:dark){
+      .surface{fill:#151515}
+      .mark{fill:#f4f2eb}
+    }
+  </style>
+  <rect class="surface" width="64" height="64" rx="15"/>
+  <path class="mark" d="M16 17h31v8L28.4 43H47v8H16v-8l18.6-18H16z"/>
+</svg>
