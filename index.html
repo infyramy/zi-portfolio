@@ -46,16 +46,18 @@
     <meta property="og:title" content="Zahirul Iman – Product Designer &amp; Digital Product Builder" />
     <meta property="og:description" content="Portfolio of Zahirul Iman, a Malaysia-based product designer and digital product builder working across product thinking, UI/UX, rapid prototyping, websites and practical digital systems." />
     <meta property="og:url" content="https://zahiruliman.com" />
-    <meta property="og:image" content="https://zahiruliman.com/assets/zahirul/zahirul-creative-tools.png" />
-    <meta property="og:image:width" content="1080" />
-    <meta property="og:image:height" content="940" />
-    <meta property="og:image:alt" content="Illustration of Zahirul Iman working with product design, visual design, AI and photography tools" />
+    <meta property="og:image" content="https://zahiruliman.com/assets/zahirul/zahirul-iman-social.jpg" />
+    <meta property="og:image:secure_url" content="https://zahiruliman.com/assets/zahirul/zahirul-iman-social.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Zahirul Iman — zahiruliman.com" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Zahirul Iman – Product Designer &amp; Digital Product Builder" />
     <meta name="twitter:description" content="Portfolio of Zahirul Iman, a Malaysia-based product designer and digital product builder." />
-    <meta name="twitter:image" content="https://zahiruliman.com/assets/zahirul/zahirul-creative-tools.png" />
-    <meta name="twitter:image:alt" content="Illustration of Zahirul Iman working with product design, visual design, AI and photography tools" />
+    <meta name="twitter:image" content="https://zahiruliman.com/assets/zahirul/zahirul-iman-social.jpg" />
+    <meta name="twitter:image:alt" content="Zahirul Iman — zahiruliman.com" />
 
     <title>Zahirul Iman · Product Designer &amp; Digital Product Builder</title>
     <script type="application/ld+json">
@@ -67,7 +69,9 @@
             "@id": "https://zahiruliman.com/#person",
             "name": "Zahirul Iman",
             "url": "https://zahiruliman.com",
-            "image": "https://zahiruliman.com/assets/zahirul/zahirul-creative-tools.png",
+            "image": {
+              "@id": "https://zahiruliman.com/#social-image"
+            },
             "jobTitle": "Product Designer & Digital Product Builder",
             "address": {
               "@type": "PostalAddress",
@@ -88,6 +92,15 @@
             ]
           },
           {
+            "@type": "ImageObject",
+            "@id": "https://zahiruliman.com/#social-image",
+            "url": "https://zahiruliman.com/assets/zahirul/zahirul-iman-social.jpg",
+            "contentUrl": "https://zahiruliman.com/assets/zahirul/zahirul-iman-social.jpg",
+            "width": 1200,
+            "height": 630,
+            "caption": "Zahirul Iman — zahiruliman.com"
+          },
+          {
             "@type": "WebSite",
             "@id": "https://zahiruliman.com/#website",
             "url": "https://zahiruliman.com",
@@ -105,6 +118,9 @@
             "name": "Zahirul Iman – Product Designer & Digital Product Builder",
             "isPartOf": {
               "@id": "https://zahiruliman.com/#website"
+            },
+            "primaryImageOfPage": {
+              "@id": "https://zahiruliman.com/#social-image"
             },
             "mainEntity": {
               "@id": "https://zahiruliman.com/#person"

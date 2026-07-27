@@ -63,3 +63,5 @@ The contact experience now uses one compact “Start a quick chat” launcher on
 The visible contact section should be the homepage’s only footer-style contact block, headed “Let’s talk”; do not repeat the legacy “Have something in mind? / Say hello” footer beneath it. Present Email and LinkedIn as the primary contact actions. Beneath a subtle divider, use “Not ready to reach out yet?” to introduce the secondary “Chat with virtual Zahirul” launcher.
 
 End the homepage with a minimal non-contact footer containing only “© 2026 Zahirul Iman” and “Product Designer & Digital Product Builder · Malaysia.” The canonical production origin used for SEO, Open Graph, structured data, robots, and sitemap files is `https://zahiruliman.com`.
+
+Use `/public/assets/zahirul/zahirul-iman-social.jpg` as the canonical 1200×630 Open Graph and Twitter sharing image. Its visual identity stays minimal: muted green-grey and off-white, with only “Zahirul Iman” and “zahiruliman.com.” Keep the absolute production URL, dimensions, JPEG MIME type, concise alt text, and matching Schema.org `ImageObject` synchronized if the asset is ever replaced.
