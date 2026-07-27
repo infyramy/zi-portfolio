@@ -1,14 +1,121 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-MY">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#0e0e12" />
-    <meta name="description" content="Zahirul Iman's portfolio — product design, UI/UX, digital products, web, rapid prototyping, and delivery." />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="author" content="Zahirul Iman" />
+    <meta name="description" content="Portfolio of Zahirul Iman, a Malaysia-based product designer and digital product builder working across product thinking, UI/UX, rapid prototyping, websites and practical digital systems." />
+    <meta name="keywords" content="Zahirul Iman, product designer Malaysia, UI UX designer Malaysia, digital product builder, rapid prototyping, product design portfolio" />
+
+    <link rel="canonical" href="https://zahiruliman.com" />
+    <link rel="alternate" hreflang="en-MY" href="https://zahiruliman.com" />
+    <link rel="alternate" hreflang="x-default" href="https://zahiruliman.com" />
+    <link rel="icon" type="image/png" href="/assets/zahirul/zahirul-head.png" />
+    <link rel="apple-touch-icon" href="/assets/zahirul/zahirul-head.png" />
+    <link rel="preload" as="image" href="/assets/zahirul/zahirul-creative-tools.webp" fetchpriority="high" />
+    <link rel="preload" as="image" href="/assets/zahirul/zahirul-camera-motion-fast.webp" />
+    <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/SaansCollectionVF.woff2" crossorigin />
+    <script>
+      try {
+        const savedTheme = localStorage.getItem("plud-theme");
+        const bootTheme = savedTheme === "light" || savedTheme === "dark"
+          ? savedTheme
+          : (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.dataset.theme = bootTheme;
+        document.documentElement.style.colorScheme = bootTheme;
+      } catch {
+        document.documentElement.dataset.theme = "light";
+      }
+    </script>
+    <style>
+      html,body,#root{min-height:100%;margin:0;background:#fff}
+      :root[data-theme=dark],:root[data-theme=dark] body,:root[data-theme=dark] #root{background:#0a0a0a}
+      .boot-splash{position:fixed;z-index:400;inset:0;display:grid;place-items:center;padding:24px;overflow:hidden;background:#edf0ec;color:#667069;font-family:Saans,ui-sans-serif,system-ui,sans-serif}
+      .boot-splash-progress{display:flex;align-items:baseline;color:inherit;font-size:clamp(2rem,7vw,3.25rem);font-weight:480;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+      .boot-splash-progress small{margin-left:3px;color:inherit;font-size:.28em;font-weight:520;opacity:.72}
+      :root[data-theme=dark] .boot-splash{background:#151916;color:#9ca69f}
+    </style>
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_MY" />
+    <meta property="og:site_name" content="Zahirul Iman" />
+    <meta property="og:title" content="Zahirul Iman – Product Designer &amp; Digital Product Builder" />
+    <meta property="og:description" content="Portfolio of Zahirul Iman, a Malaysia-based product designer and digital product builder working across product thinking, UI/UX, rapid prototyping, websites and practical digital systems." />
+    <meta property="og:url" content="https://zahiruliman.com" />
+    <meta property="og:image" content="https://zahiruliman.com/assets/zahirul/zahirul-creative-tools.png" />
+    <meta property="og:image:width" content="1080" />
+    <meta property="og:image:height" content="940" />
+    <meta property="og:image:alt" content="Illustration of Zahirul Iman working with product design, visual design, AI and photography tools" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Zahirul Iman – Product Designer &amp; Digital Product Builder" />
+    <meta name="twitter:description" content="Portfolio of Zahirul Iman, a Malaysia-based product designer and digital product builder." />
+    <meta name="twitter:image" content="https://zahiruliman.com/assets/zahirul/zahirul-creative-tools.png" />
+    <meta name="twitter:image:alt" content="Illustration of Zahirul Iman working with product design, visual design, AI and photography tools" />
+
     <title>Zahirul Iman · Product Designer &amp; Digital Product Builder</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": "https://zahiruliman.com/#person",
+            "name": "Zahirul Iman",
+            "url": "https://zahiruliman.com",
+            "image": "https://zahiruliman.com/assets/zahirul/zahirul-creative-tools.png",
+            "jobTitle": "Product Designer & Digital Product Builder",
+            "address": {
+              "@type": "PostalAddress",
+              "addressCountry": "MY"
+            },
+            "sameAs": [
+              "https://www.linkedin.com/in/zahiruliman",
+              "https://www.instagram.com/zahiruliman/",
+              "https://github.com/zahiruliman"
+            ],
+            "knowsAbout": [
+              "Product design",
+              "UI/UX design",
+              "Rapid prototyping",
+              "Digital products",
+              "Web design",
+              "Product strategy"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://zahiruliman.com/#website",
+            "url": "https://zahiruliman.com",
+            "name": "Zahirul Iman",
+            "description": "Product design and digital product portfolio of Zahirul Iman.",
+            "inLanguage": "en-MY",
+            "publisher": {
+              "@id": "https://zahiruliman.com/#person"
+            }
+          },
+          {
+            "@type": "ProfilePage",
+            "@id": "https://zahiruliman.com/#profile",
+            "url": "https://zahiruliman.com",
+            "name": "Zahirul Iman – Product Designer & Digital Product Builder",
+            "isPartOf": {
+              "@id": "https://zahiruliman.com/#website"
+            },
+            "mainEntity": {
+              "@id": "https://zahiruliman.com/#person"
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><div class="boot-splash" role="progressbar" aria-label="Loading portfolio" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><strong class="boot-splash-progress">00<small>%</small></strong></div></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

@@ -26,13 +26,13 @@ const experimentHighlights = [
 const skillIcon = (name) => `/assets/zahirul/skill-icons/${name}.svg`;
 const capabilityGroups = [
   { title:"Using now", tools:[
-    ["Figma",skillIcon("figma")],["OpenAI Codex",skillIcon("openai")],["Claude Code",skillIcon("claude")],["Gemini",skillIcon("googlegemini")],["Dokploy","/assets/zahirul/skill-icons/dokploy.png"],["Google AI Studio",skillIcon("google")],["GitHub",skillIcon("github")],["Docker",skillIcon("docker")],["VPS server",skillIcon("server")],
+    ["Figma",skillIcon("figma")],["OpenAI Codex",skillIcon("openai")],["Claude Code",skillIcon("claude")],["Dokploy","/assets/zahirul/skill-icons/dokploy.png"],["Google AI Studio",skillIcon("google")],["GitHub",skillIcon("github")],["Docker",skillIcon("docker")],["VPS server",skillIcon("server")],
   ]},
   { title:"Less often now", tools:[
-    ["WordPress",skillIcon("wordpress")],["Elementor",skillIcon("elementor")],["Adobe Lightroom",skillIcon("adobelightroom")],["MySQL",skillIcon("mysql")],["NGINX",skillIcon("nginx")],
+    ["WordPress",skillIcon("wordpress")],["Elementor",skillIcon("elementor")],["Adobe Lightroom",skillIcon("adobelightroom")],["MySQL",skillIcon("mysql")],
   ]},
   { title:"Familiar, needs a refresh", tools:[
-    ["Adobe Photoshop",skillIcon("adobephotoshop")],["GitHub Actions",skillIcon("githubactions")],["Linux",skillIcon("linux")],
+    ["Adobe Photoshop",skillIcon("adobephotoshop")],["GitHub Actions",skillIcon("githubactions")],["Linux",skillIcon("linux")],["NGINX",skillIcon("nginx")],
   ]},
 ];
 
@@ -172,9 +172,9 @@ function SiteChrome({ route }) {
           <SectionLink id="work-highlights" title="Selected work" onNavigate={close}/>
           <SectionLink id="past-work" title="Past work" onNavigate={close}/>
           <SectionLink id="experiments" title="Experiments" onNavigate={close}/>
-          <SectionLink id="infyra" title="Built together" onNavigate={close}/>
+          <SectionLink id="infyra" title="Digital products" onNavigate={close}/>
           <SectionLink id="photography" title="Photography" onNavigate={close}/>
-          <SectionLink id="contact" title="Say hello" onNavigate={close}/>
+          <SectionLink id="contact" title="Let’s talk" onNavigate={close}/>
         </nav>
         <div className="menu-footer">
           <div className="menu-contact">
@@ -182,7 +182,7 @@ function SiteChrome({ route }) {
             <div className="menu-actions"><a className="menu-primary-action" href={`mailto:${EMAIL}`}>Email me <span aria-hidden="true">↗</span></a><a href={LINKEDIN} target="_blank" rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a></div>
             <div className="menu-socials"><a href={INSTAGRAM} target="_blank" rel="noreferrer">Instagram</a><a href={GITHUB} target="_blank" rel="noreferrer">GitHub</a></div>
           </div>
-          <figure className="menu-illustration" aria-hidden="true"><img src="/assets/zahirul/zahirul-creative-tools.png" alt=""/></figure>
+          <figure className="menu-illustration" aria-hidden="true"><img src="/assets/zahirul/zahirul-creative-tools.webp" alt=""/></figure>
         </div>
       </div>
     </div>
@@ -216,7 +216,7 @@ function SocialLinks({ includeGitHub = false }) {
 
 function WhatIWorkWith() {
   return <section className="capabilities-section page-column" id="capabilities" aria-labelledby="capabilities-title" data-motion="list">
-    <div className="section-heading"><h2 id="capabilities-title">What’s in rotation</h2></div>
+    <div className="section-heading"><h2 id="capabilities-title">Tools I’ve worked with</h2></div>
     <ul className="capability-list">
       {capabilityGroups.map((group,index)=><li className="capability-row" key={group.title} style={{"--motion-index":index}}>
         <h3>{group.title}</h3>
@@ -237,13 +237,48 @@ function VisualPlaceholder({ tone, label, className = "", decorative = false }) 
   return <div className={`visual-placeholder tone-${tone} ${className}`} role={decorative ? undefined : "img"} aria-label={decorative ? undefined : label} aria-hidden={decorative || undefined}/>;
 }
 
+function MediaPreview({ item, onClose }) {
+  useEffect(() => {
+    if (!item) return;
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = event => {
+      if (event.key === "Escape") onClose();
+    };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [item, onClose]);
+  if (!item) return null;
+  return <div className="media-preview" role="dialog" aria-modal="true" aria-label={`${item.title} preview`} onClick={onClose}>
+    <div className="media-preview-panel" onClick={event => event.stopPropagation()}>
+      <header>
+        <div><strong>{item.title}</strong>{item.context && <span>{item.context}</span>}</div>
+        <button type="button" onClick={onClose} aria-label="Close preview"><span aria-hidden="true">×</span></button>
+      </header>
+      <div className="media-preview-canvas">
+        {item.media
+          ? item.mediaType === "video"
+            ? <video src={item.media} controls autoPlay muted playsInline aria-label={`${item.title} video preview`}/>
+            : <img src={item.media} alt={item.alt || `${item.title} project preview`}/>
+          : <VisualPlaceholder tone={item.tone || "slate"} label={`${item.title} preview placeholder`}/>}
+      </div>
+    </div>
+  </div>;
+}
+
 function WorkReel({ items, label }) {
+  const reelRef = useRef(null);
   const trackRef = useRef(null);
   const frameRef = useRef(0);
   const offsetRef = useRef(0);
-  const state = useRef({ start:0, origin:0, dragging:false, lastX:0, lastTime:0, velocity:0 });
+  const state = useRef({ start:0, origin:0, dragging:false, moved:false, lastX:0, lastTime:0, velocity:0 });
+  const gesture = useRef({ x:0, y:0, moved:false, lastScroll:0 });
   const [offset, setOffset] = useState(0);
   const [dragging, setDragging] = useState(false);
+  const [preview, setPreview] = useState(null);
   const clamp = (value) => {
     const columnWidth = Math.min(640, window.innerWidth - 32);
     const startInset = Math.max(16, (window.innerWidth - columnWidth) / 2);
@@ -276,14 +311,15 @@ function WorkReel({ items, label }) {
     media.closest(".work-slide")?.style.setProperty("--media-ratio", width / height);
   };
   const down = (event) => {
-    if (window.matchMedia("(max-width: 700px), (pointer: coarse)").matches) return;
+    if (window.matchMedia("(max-width: 900px), (pointer: coarse)").matches) return;
     cancelAnimationFrame(frameRef.current);
-    state.current = { start:event.clientX, origin:offsetRef.current, dragging:true, lastX:event.clientX, lastTime:performance.now(), velocity:0 };
+    state.current = { start:event.clientX, origin:offsetRef.current, dragging:true, moved:false, lastX:event.clientX, lastTime:performance.now(), velocity:0 };
     setDragging(true);
     event.currentTarget.setPointerCapture(event.pointerId);
   };
   const move = (event) => {
     if (!state.current.dragging) return;
+    if (Math.abs(event.clientX - state.current.start) > 8) state.current.moved = true;
     const now = performance.now();
     const elapsed = Math.max(8, now - state.current.lastTime);
     state.current.velocity = ((event.clientX - state.current.lastX) / elapsed) * 16.67;
@@ -308,19 +344,30 @@ function WorkReel({ items, label }) {
     };
     frameRef.current = requestAnimationFrame(glide);
   };
-  return <section className={`work-reel${dragging ? " is-dragging" : ""}`} aria-label={label} aria-roledescription="carousel" data-motion="media">
+  const startGesture = event => {
+    gesture.current = { x:event.clientX, y:event.clientY, moved:false, lastScroll:gesture.current.lastScroll };
+  };
+  const trackGesture = event => {
+    if (Math.hypot(event.clientX - gesture.current.x, event.clientY - gesture.current.y) > 8) gesture.current.moved = true;
+  };
+  const openPreview = (event, item) => {
+    const justScrolled = performance.now() - gesture.current.lastScroll < 180;
+    if (event.detail !== 0 && (gesture.current.moved || justScrolled)) return;
+    setPreview(item);
+  };
+  return <><section ref={reelRef} className={`work-reel${dragging ? " is-dragging" : ""}`} aria-label={label} aria-roledescription="carousel" data-motion="media" onPointerDownCapture={startGesture} onPointerMoveCapture={trackGesture} onScroll={() => { gesture.current.lastScroll = performance.now(); }}>
     <div ref={trackRef} className="work-track" style={{ transform: `translate3d(calc((100vw - min(640px, 100vw - 32px))/2 + ${offset}px),0,0)` }} onPointerDown={down} onPointerMove={move} onPointerUp={release} onPointerCancel={event => release(event, false)}>
       {items.map(item => {
         const normalized = Array.isArray(item) ? { tone:item[0], title:item[1], context:item[2] } : item;
-        return <figure className="work-slide" style={normalized.ratio ? {"--media-ratio":normalized.ratio} : undefined} key={`${label}-${normalized.title}`}><div className="work-media">
+        return <figure className="work-slide" style={normalized.ratio ? {"--media-ratio":normalized.ratio} : undefined} key={`${label}-${normalized.title}`}><button className="work-media" type="button" onClick={event => openPreview(event, normalized)} aria-label={`Open ${normalized.title} preview`}>
           <VisualPlaceholder tone={normalized.tone} label={`${normalized.title} placeholder`} decorative={Boolean(normalized.media)}/>
           {normalized.media && (normalized.mediaType === "video"
             ? <video src={normalized.media} autoPlay muted loop playsInline onLoadedMetadata={syncRatio} aria-label={`${normalized.title} project preview`}/>
             : <img src={normalized.media} alt={normalized.alt || `${normalized.title} project preview`} loading="lazy" draggable="false" onLoad={syncRatio}/>)}
-        </div><figcaption><strong>{normalized.title}</strong><span>{normalized.context}</span></figcaption></figure>;
+        </button><figcaption><strong>{normalized.title}</strong><span>{normalized.context}</span></figcaption></figure>;
       })}
     </div>
-  </section>;
+  </section><MediaPreview item={preview} onClose={() => setPreview(null)}/></>;
 }
 
 function ActivityCalendar({ activity, children, label }) {
@@ -347,9 +394,9 @@ function ActivityCalendar({ activity, children, label }) {
 
 function CodexActivity() {
   const tools = {
-    codex: { label:"Codex", source:"Sessions recorded across tools" },
-    claude: { label:"Claude Code", source:"Sessions recorded across tools" },
-    antigravity: { label:"Google Antigravity", source:"Sessions recorded across tools" },
+    codex: { label:"Codex", source:"Recorded sessions with Codex" },
+    claude: { label:"Claude Code", source:"Recorded sessions with Claude Code" },
+    antigravity: { label:"Google Antigravity", source:"Recorded sessions with Google Antigravity" },
   };
   const [tool, setTool] = useState("all");
   const visibleTools = tool === "all" ? Object.keys(tools) : [tool];
@@ -366,10 +413,10 @@ function CodexActivity() {
   return <section className={`codex-activity page-column tool-${tool}`} aria-labelledby="activity-tool-title" data-motion="grid">
     <div className="codex-activity-head">
       <div>
-        <h3 id="activity-tool-title">AI-assisted work log</h3>
-        <p>{selected ? selected.source : "Sessions recorded across tools"}</p>
+        <h3 id="activity-tool-title">Building with AI tools</h3>
+        <p className="activity-description">{selected ? selected.source : "Recorded sessions across Codex, Claude Code and Antigravity"}</p>
       </div>
-      <p>{selected ? `${selectedActivity.total} sessions recorded` : `${total} sessions recorded`}</p>
+      <p className="activity-total">{selected ? `${selectedActivity.total} sessions` : `${total} sessions`}</p>
     </div>
     <div className="activity-filter" role="group" aria-label="Filter activity by agent">
       {[["all","All agents"], ...Object.entries(tools).map(([key, option]) => [key, option.label])].map(([key, label]) =>
@@ -411,10 +458,11 @@ function SesiFotoFeature() {
       </svg>
       <div className="featured-media"><img src="https://zi.0w0.my/assets/work/Frame.png" alt="SesiFoto product interface preview" loading="lazy" draggable="false"/></div>
       <div className="featured-copy">
-        <div>
+        <div className="featured-heading">
           <h3>SesiFoto <span>↗</span></h3>
-          <p>We planned, built, and shipped the Raya 2026 booking campaign in four months, then went all out on promotion, daily demo calls, and hands-on maintenance through the end of Raya.</p>
+          <span className="feature-status"><i aria-hidden="true"/>In progress</span>
         </div>
+        <p className="featured-description">Built from zero in four months for Raya 2026. Now improving it to support studios year-round.</p>
         <div className="product-proof" aria-label="SesiFoto Raya 2026 results">
           <p><strong>50+ studios</strong><span>joined the Raya session</span></p>
           <p><strong>RM3M+</strong><span>Raya photography slots booked during Ramadan</span></p>
@@ -431,6 +479,8 @@ function Home() {
   const [chatMode, setChatMode] = useState(false);
   const [ribbonShooting, setRibbonShooting] = useState(false);
   const [ribbonStaticShot, setRibbonStaticShot] = useState(false);
+  const [ribbonMotionVisible, setRibbonMotionVisible] = useState(false);
+  const [cameraReady, setCameraReady] = useState(false);
   const [cameraFlash, setCameraFlash] = useState(0);
   const cameraFlashTimerRef = useRef(null);
   const cameraResetTimerRef = useRef(null);
@@ -464,67 +514,89 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    document.body.classList.toggle("chat-mode", chatMode);
-    return () => document.body.classList.remove("chat-mode");
-  }, [chatMode]);
-  useEffect(() => {
-    const mobileQuery = window.matchMedia("(max-width: 700px)");
-    const updateChatMode = () => {
-      if (!mobileQuery.matches) {
-        setChatMode(false);
-        return;
-      }
-      const section = document.querySelector(".conversation-section");
-      if (!section) return;
-      const bounds = section.getBoundingClientRect();
-      setChatMode(bounds.top <= window.innerHeight * .12 && bounds.bottom >= window.innerHeight * .88);
-    };
-    window.addEventListener("scroll", updateChatMode, { passive:true });
-    document.addEventListener("scroll", updateChatMode, { passive:true, capture:true });
-    window.addEventListener("resize", updateChatMode);
-    mobileQuery.addEventListener("change", updateChatMode);
-    const section = document.querySelector(".conversation-section");
-    const chatObserver = section ? new IntersectionObserver(updateChatMode, { threshold:[0,.72,.9] }) : null;
-    if (section) chatObserver.observe(section);
-    const initialCheck = window.setTimeout(updateChatMode, 180);
+    let active = true;
+    const sources = [
+      "/assets/zahirul/zahirul-camera-motion-fast.webp",
+      "/assets/zahirul/zahirul-camera-head-ribbon.png",
+    ];
+    Promise.allSettled(sources.map(source => new Promise(resolve => {
+      const image = new Image();
+      const done = () => resolve();
+      image.onload = done;
+      image.onerror = done;
+      image.src = source;
+      if (image.complete) done();
+      else image.decode?.().then(done, () => {});
+    }))).then(() => {
+      if (active) setCameraReady(true);
+    });
     return () => {
-      window.clearTimeout(initialCheck);
-      window.removeEventListener("scroll", updateChatMode);
-      document.removeEventListener("scroll", updateChatMode, { capture:true });
-      window.removeEventListener("resize", updateChatMode);
-      mobileQuery.removeEventListener("change", updateChatMode);
-      chatObserver?.disconnect();
+      active = false;
     };
   }, []);
 
+  useEffect(() => {
+    document.body.classList.toggle("chat-mode", chatMode);
+    document.documentElement.classList.toggle("chat-open", chatMode);
+    return () => {
+      document.body.classList.remove("chat-mode");
+      document.documentElement.classList.remove("chat-open");
+    };
+  }, [chatMode]);
+
   const takeRibbonPhoto = () => {
-    if (ribbonShooting) return;
+    if (ribbonShooting || !cameraReady) return;
     window.clearTimeout(cameraFlashTimerRef.current);
     window.clearTimeout(cameraResetTimerRef.current);
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     setRibbonStaticShot(reduceMotion);
+    setRibbonMotionVisible(false);
     setRibbonShooting(true);
-    if (!reduceMotion) {
+    cameraResetTimerRef.current = window.setTimeout(() => {
+      setRibbonShooting(false);
+      setRibbonMotionVisible(false);
+      setRibbonStaticShot(false);
+    }, reduceMotion ? 700 : 1700);
+  };
+
+  const startRibbonSequence = () => {
+    if (!ribbonShooting) return;
+    window.clearTimeout(cameraFlashTimerRef.current);
+    window.clearTimeout(cameraResetTimerRef.current);
+    setRibbonMotionVisible(true);
+    if (!ribbonStaticShot) {
       cameraFlashTimerRef.current = window.setTimeout(() => setCameraFlash(value => value + 1), 500);
     }
-    cameraResetTimerRef.current = window.setTimeout(() => setRibbonShooting(false), reduceMotion ? 650 : 1350);
+    cameraResetTimerRef.current = window.setTimeout(() => {
+      setRibbonShooting(false);
+      setRibbonMotionVisible(false);
+      setRibbonStaticShot(false);
+    }, ribbonStaticShot ? 620 : 1310);
   };
 
   return <main className="home-page">
     <button
       type="button"
-      className={`scroll-ribbon ${showScrollRibbon || chatMode ? "is-visible" : ""} ${ribbonShooting ? "is-shooting" : ""} ${chatMode ? "chat-avatar" : ""}`}
+      className={`scroll-ribbon ${showScrollRibbon && !chatMode ? "is-visible" : ""} ${ribbonShooting ? "is-shooting" : ""}`}
       onClick={takeRibbonPhoto}
-      disabled={!showScrollRibbon || chatMode}
-      aria-label={chatMode ? "Zahirul Iman" : "Take a photo"}
-      title={chatMode ? undefined : "Take a photo"}
+      disabled={!showScrollRibbon || chatMode || !cameraReady}
+      aria-label="Take a photo"
+      title="Take a photo"
     >
-      <span className="scroll-ribbon-mark"><img key={ribbonShooting && !chatMode ? "camera-motion" : "head"} src={ribbonShooting && !chatMode ? (ribbonStaticShot ? "/assets/zahirul/zahirul-camera-head-ribbon.png" : "/assets/zahirul/zahirul-camera-motion-v2.webp") : "/assets/zahirul/zahirul-head.png"} alt=""/></span>
+      <span className={`scroll-ribbon-mark ${ribbonMotionVisible ? "has-motion" : ""}`}>
+        <img className="ribbon-head" src="/assets/zahirul/zahirul-head.png" alt=""/>
+        {ribbonShooting && <img
+          className={`ribbon-motion ${ribbonMotionVisible ? "is-ready" : ""}`}
+          src={ribbonStaticShot ? "/assets/zahirul/zahirul-camera-head-ribbon.png" : "/assets/zahirul/zahirul-camera-motion-fast.webp"}
+          onLoad={startRibbonSequence}
+          alt=""
+        />}
+      </span>
     </button>
     {cameraFlash > 0 && <span className="camera-flash" key={cameraFlash} aria-hidden="true" onAnimationEnd={() => setCameraFlash(0)}/>}
     <section className="home-intro page-column" id="introduction">
       <figure className="hero-illustration" ref={heroIllustrationRef}>
-        <img src="/assets/zahirul/zahirul-creative-tools.png" alt="Illustration of Zahirul at work with product design, visual design, AI, and photography tools" fetchPriority="high"/>
+        <img src="/assets/zahirul/zahirul-creative-tools.webp" width="1080" height="940" alt="Illustration of Zahirul at work with product design, visual design, AI, and photography tools" fetchPriority="high"/>
       </figure>
       <h1>Hi, I&apos;m Zahirul Iman.<br/>Product Designer &amp; Digital Product Builder.</h1>
       <p>I work between product thinking, UI/UX, rapid prototyping, web, and systems, turning unclear ideas into something understandable, testable, and ready for the right people to build.</p>
@@ -535,11 +607,11 @@ function Home() {
     <section className="section-heading page-column" id="work-highlights" data-motion="copy"><h2>Selected work</h2><p>A closer look at products, interfaces, websites and systems I helped shape.</p></section>
     <WorkReel items={workHighlights} label="Work highlights"/>
     <PastWork/>
-    <section className="experiment-section" id="experiments"><div className="page-column experiment-intro" data-motion="copy"><h2>Made out of curiosity</h2><p>I test AI, visual concepts, branding, rapid prototypes, interfaces, workflows, and new tools almost daily — mainly to understand what is possible before deciding what is actually useful.</p></div><WorkReel items={experimentHighlights} label="Creative experiments"/><CodexActivity/></section>
-    <section className="infyra-chapter" id="infyra"><div className="story-section infyra-section page-column" data-motion="copy"><div><h2>Built together</h2><p className="section-lead"><strong>Infyra is our three-person side venture for building real things.</strong></p><a className="infyra-site-link" href="https://infyra.my/" target="_blank" rel="noreferrer">Visit infyra.my <span aria-hidden="true">↗</span></a></div><div className="infyra-copy"><p>A small three-person studio I co-run alongside my main career. It gives us room to build selected digital products, websites, business systems, and client solutions, starting with the problem rather than the technology.</p><p>My role moves between product direction, UI/UX, prototyping, client discovery, project structure, and helping make the idea clear enough for the team to build.</p><blockquote>“Discuss first. Build only what makes sense.”</blockquote><p>Understand the real problem first. Build only the digital layer that is genuinely useful.</p></div></div><SesiFotoFeature/></section>
-    <section className="photography-section" id="photography"><div className="page-column photography-intro" data-motion="copy"><div><h2>Life through a lens</h2><p className="section-lead"><strong>Pelatography is my photography identity, active since 2016.</strong></p></div><p>It started during university and never really left. These days I shoot mostly part-time — usually weddings and weekend assignments, often freelancing with different photography teams and studios. Pelatography remains my personal photography identity, rather than a full-time studio operation.</p></div><PhotographyGear/><WorkReel items={photographyHighlights} label="Pelatography work"/></section>
-    <Conversation mobileChatActive={chatMode} onMobileModeChange={setChatMode}/>
-    <Footer/>
+    <section className="experiment-section" id="experiments"><div className="page-column experiment-intro" data-motion="copy"><h2>Experiments</h2><p>I test AI, visual concepts, branding, rapid prototypes, interfaces, workflows, and new tools almost daily — mainly to understand what is possible before deciding what is actually useful.</p></div><WorkReel items={experimentHighlights} label="Creative experiments"/><CodexActivity/></section>
+    <section className="infyra-chapter" id="infyra"><div className="story-section infyra-section page-column" data-motion="copy"><div><h2>Building digital products</h2><p className="section-lead"><strong>Infyra Ventures is a side venture I co-run alongside my main career.</strong></p><a className="infyra-site-link" href="https://infyra.my/" target="_blank" rel="noreferrer">Visit infyra.my <span aria-hidden="true">↗</span></a></div><div className="infyra-copy"><p>It gives us room to build selected digital products, websites, business systems, and client solutions, starting with the problem rather than the technology.</p><p>My role moves between product direction, UI/UX, prototyping, client discovery, project structure, and helping make the idea clear enough for the team to build.</p><blockquote>“Discuss first. Build only what makes sense.”</blockquote><p>Understand the real problem first. Build only the digital layer that is genuinely useful.</p></div></div><SesiFotoFeature/></section>
+    <section className="photography-section" id="photography"><div className="page-column photography-intro" data-motion="copy"><div><h2>Photography</h2><p className="section-lead"><strong>Pelatography is my personal photography identity, active part-time since 2016.</strong></p></div><p>It started during university and never really left. These days I shoot mostly weddings and weekend assignments, often freelancing with different photography teams and studios rather than operating as a full-time studio.</p></div><PhotographyGear/><WorkReel items={photographyHighlights} label="Pelatography work"/></section>
+    <Conversation active={chatMode} onActiveChange={setChatMode}/>
+    <footer className="home-footer page-column"><p>© 2026 Zahirul Iman</p><p>Product Designer &amp; Digital Product Builder · Malaysia</p></footer>
   </main>;
 }
 
@@ -560,13 +632,13 @@ function PhotographyGear(){
   </aside>;
 }
 
-function PastWork(){const items=[
-  {type:"Website",title:"Calm & Chaos",description:"Event booking website; I shaped its interface, visual direction, and customer flow.",href:"https://calmandchaos.asia/book"},
-  {type:"Website",title:"The Tulip Wedding",description:"Wedding website; I designed a polished browsing and enquiry experience.",href:"https://thetulipwedding.com/"},
-  {type:"Website",title:"Sunshine Raya Contest Submission",description:"Public campaign entry website; I adapted the campaign design and connected submissions and receipt photos to Google Sheets and Drive."},
-  {type:"Design",title:"Innogauge Research Interface",description:"Early research-platform collaboration; I helped shape the base UI and initial product direction for further discussion."},
-  {type:"Design",title:"ZASSApp University Super App",description:"University super-app concept; I designed the mobile experience and its supporting sub-apps."},
-];return <section className="story-section past-work page-column" id="past-work" data-motion="list"><div className="section-heading"><h2>Past work</h2></div><div className="project-index"><div className="project-index-head" aria-hidden="true"><span>Type</span><span>Project</span><span/></div>{items.map((item,index)=>{const content=<><span className="project-type">{item.type}</span><span className="project-summary"><strong>{item.title}</strong><span>{item.description}</span></span>{item.href?<span className="project-visit">Visit <span aria-hidden="true">↗</span></span>:<span/>}</>;const style={"--motion-index":index};return item.href?<a className="project-row" href={item.href} target="_blank" rel="noreferrer" key={item.title} style={style}>{content}</a>:<div className="project-row" key={item.title} style={style}>{content}</div>})}</div></section>}
+function PastWork(){const [preview,setPreview]=useState(null);const items=[
+  {type:"UX design",title:"Calm & Chaos",description:"Event booking web app; I focused on its UX and interface design.",href:"https://calmandchaos.asia/book"},
+  {type:"Website",title:"The Tulip Wedding",description:"Wedding website; I worked across its content, design, and development.",href:"https://thetulipwedding.com/"},
+  {type:"Campaign site",title:"Sunshine Raya Contest Submission",description:"Campaign entry website; I worked on its content, design, and development.",tone:"yellow"},
+  {type:"UI/UX",title:"Innogauge Research Interface",description:"Research-platform interface; I created the UI/UX prototype in Figma.",media:"https://zi.0w0.my/assets/work/Innogauge.png",tone:"apricot"},
+  {type:"Product design",title:"ZASSApp University Super App",description:"Company university super-app project; I completed the product design, with development handled separately.",media:"https://zi.0w0.my/assets/work/zassapp.png",tone:"lavender"},
+];return <><section className="story-section past-work page-column" id="past-work" data-motion="list"><div className="section-heading"><h2>Past work</h2></div><div className="project-index"><div className="project-index-head" aria-hidden="true"><span>Focus</span><span>Project</span><span/></div>{items.map((item,index)=>{const content=<><span className="project-type">{item.type}</span><span className="project-summary"><strong>{item.title}</strong><span>{item.description}</span></span><span className="project-visit">{item.href ? "Visit" : "Preview"} <span aria-hidden="true">{item.href ? "↗" : "＋"}</span></span></>;const style={"--motion-index":index};return item.href?<a className="project-row" href={item.href} target="_blank" rel="noreferrer" key={item.title} style={style}>{content}</a>:<button className="project-row" type="button" onClick={()=>setPreview(item)} key={item.title} style={style}>{content}</button>})}</div></section><MediaPreview item={preview} onClose={()=>setPreview(null)}/></>}
 
 const portfolioSections = [
   { title:"Projects", items:[
@@ -622,12 +694,12 @@ const CHAT_TOPICS = {
   },
   developer: {
     question:"Can you code also?",
-    answer:"Not really. I never properly learned coding, so I am not a developer. I understand general tech concepts and how the pieces connect, but I do not claim coding experience.",
+    answer:"I’m a product designer rather than a software developer. I use AI-assisted tools to make working prototypes, and I’m comfortable following how the technical pieces connect. For production work, I collaborate with developers.",
     next:["technical", "prototype", "dev-team"],
   },
   technical: {
     question:"Then how technical are you?",
-    answer:"Enough to understand general concepts, follow the discussion, and consider technical reality when shaping a product. For implementation details, I rely on actual developers.",
+    answer:"I’m comfortable discussing product structure, APIs, hosting, data flow and implementation trade-offs at a general level. It helps me design realistically and work smoothly with developers.",
     next:["dev-team", "screens", "contact"],
   },
   messy: {
@@ -652,17 +724,17 @@ const CHAT_TOPICS = {
   },
   production: {
     question:"Prototype means production-ready?",
-    answer:"Not automatically. The prototype is there to test the experience and make decisions clearer. Production code still needs the proper engineering work.",
+    answer:"A prototype is mainly for testing the experience and making decisions clearer. When the direction works, the engineering team can turn it into the production version.",
     next:["dev-team", "handoff", "selected-work"],
   },
   "dev-team": {
     question:"Can you work with an existing dev team?",
-    answer:"Yes, from the product and design side. I can explain the flow and prototype, then discuss it with them at a general level. I rely on the developers for implementation and technical details.",
+    answer:"Yes. I can bring the product flow, interface and prototype into the discussion, then work with the developers to keep the intended experience clear as they build it.",
     next:["technical", "handoff", "contact"],
   },
   handoff: {
     question:"Do you handle documentation and QA?",
-    answer:"Not as a formal responsibility. I have not owned documentation, QA, or engineering delivery, so I will not claim experience that I do not have.",
+    answer:"My strongest contribution is the product flow, interface and prototype. For formal QA, documentation and engineering delivery, I work alongside the people responsible for those areas.",
     next:["technical", "what", "contact"],
   },
   ai: {
@@ -748,37 +820,64 @@ function chatTime(date = new Date()) {
   };
 }
 
-function Conversation({ mobileChatActive, onMobileModeChange }) {
-  const [messages, setMessages] = useState(() => [{ id:0, side:"incoming", text:"Hey, what do you want to know? Pick one first.", time:chatTime() }]);
+function Conversation({ active, onActiveChange }) {
+  const [renderChat, setRenderChat] = useState(active);
+  const [closing, setClosing] = useState(false);
+  const [messages, setMessages] = useState(() => [
+    { id:0, side:"incoming", text:"Hey, I’m Zahirul.", time:chatTime() },
+    { id:1, side:"incoming", text:"What would you like to know?", time:chatTime() },
+  ]);
   const [options, setOptions] = useState(CHAT_MAIN_OPTIONS);
   const [typing, setTyping] = useState(false);
-  const [showExitHint, setShowExitHint] = useState(false);
   const transcriptRef = useRef(null);
+  const backRef = useRef(null);
   const seen = useRef(new Set());
-  const timerRef = useRef(null);
-  const hintTimerRef = useRef(null);
-  const hintSeenRef = useRef(false);
-  const nextId = useRef(1);
+  const timersRef = useRef(new Set());
+  const closeTimerRef = useRef(null);
+  const nextId = useRef(2);
 
-  useEffect(() => () => {
-    window.clearTimeout(timerRef.current);
-    window.clearTimeout(hintTimerRef.current);
+  useEffect(() => {
+    return () => {
+      timersRef.current.forEach(timer => window.clearTimeout(timer));
+      window.clearTimeout(closeTimerRef.current);
+    };
   }, []);
   useEffect(() => {
-    if (!mobileChatActive || hintSeenRef.current) return;
-    hintSeenRef.current = true;
-    window.clearTimeout(hintTimerRef.current);
-    hintTimerRef.current = window.setTimeout(() => {
-      setShowExitHint(true);
-      hintTimerRef.current = window.setTimeout(() => setShowExitHint(false), 7000);
-    }, 280);
-  }, [mobileChatActive]);
+    window.clearTimeout(closeTimerRef.current);
+    if (active) {
+      setRenderChat(true);
+      setClosing(false);
+      return;
+    }
+    if (!renderChat) return;
+    setClosing(true);
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    closeTimerRef.current = window.setTimeout(() => {
+      setRenderChat(false);
+      setClosing(false);
+    }, reducedMotion ? 0 : 190);
+  }, [active, renderChat]);
+  useEffect(() => {
+    if (!active) return;
+    window.requestAnimationFrame(() => backRef.current?.focus());
+  }, [active]);
   useEffect(() => {
     const transcript = transcriptRef.current;
     if (!transcript) return;
     transcript.scrollTo({ top:transcript.scrollHeight, behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   }, [messages, options, typing]);
 
+  const schedule = (callback, delay) => {
+    const timer = window.setTimeout(() => {
+      timersRef.current.delete(timer);
+      callback();
+    }, delay);
+    timersRef.current.add(timer);
+  };
+  const replyParts = answer => {
+    if (Array.isArray(answer)) return answer;
+    return answer.match(/[^.!?]+[.!?]+|[^.!?]+$/g)?.map(part => part.trim()).filter(Boolean) || [answer];
+  };
   const choose = (key) => {
     if (typing) return;
     const topic = CHAT_TOPICS[key];
@@ -787,44 +886,45 @@ function Conversation({ mobileChatActive, onMobileModeChange }) {
     setTyping(true);
     const repeated = seen.current.has(key);
     seen.current.add(key);
-    const mobile = window.matchMedia("(max-width: 700px)").matches;
-    const replyDelay = mobile
-      ? (repeated ? 420 : Math.min(940, 430 + topic.answer.length * 1.7 + Math.random() * 120))
-      : 520;
-    timerRef.current = window.setTimeout(() => {
+    const replies = repeated
+      ? ["We touched on that one earlier.", "You can scroll up or choose another topic below."]
+      : replyParts(topic.answer);
+    const finishReply = () => setOptions(repeated ? CHAT_MAIN_OPTIONS : topic.next);
+    const deliver = index => {
       setTyping(false);
       setMessages(current => [...current, {
         id:nextId.current++,
         side:"incoming",
-        text:repeated ? "This one we already covered above. Scroll up a bit, or pick another one. No worries." : topic.answer,
+        text:replies[index],
         time:chatTime(),
       }]);
-      setOptions(repeated ? CHAT_MAIN_OPTIONS : topic.next);
-    }, replyDelay);
+      if (index === replies.length - 1) {
+        finishReply();
+        return;
+      }
+      schedule(() => {
+        setTyping(true);
+        schedule(() => deliver(index + 1), 320 + Math.random() * 300);
+      }, 120 + Math.random() * 100);
+    };
+    const firstDelay = Math.min(1100, 500 + replies[0].length * 4 + Math.random() * 180);
+    schedule(() => deliver(0), firstDelay);
   };
 
   const showMainOptions = () => setOptions(CHAT_MAIN_OPTIONS);
   const showingMainOptions = options.length === CHAT_MAIN_OPTIONS.length && options.every((key, index) => key === CHAT_MAIN_OPTIONS[index]);
-  const remindExit = () => {
-    if (!window.matchMedia("(max-width: 700px)").matches) return;
-    setShowExitHint(true);
-    window.clearTimeout(hintTimerRef.current);
-    hintTimerRef.current = window.setTimeout(() => setShowExitHint(false), 3200);
-  };
-  const exitChat = () => {
-    onMobileModeChange?.(false);
-    document.querySelector(".chat-entry-snap")?.scrollIntoView({
-      block:"start",
-      behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-    });
-  };
+  const exitChat = () => onActiveChange?.(false);
 
-  return <><section className="chat-entry-snap page-column" aria-label="Chat introduction"><div><p>Have something in mind?</p><h2>Start anywhere</h2><nav className="chat-entry-links" aria-label="Contact links"><a href={`mailto:${EMAIL}`}>Email</a><a href={LINKEDIN} target="_blank" rel="noreferrer">LinkedIn</a><a href={INSTAGRAM} target="_blank" rel="noreferrer">Instagram</a></nav><span>Swipe up to open a quick chat</span></div></section><section className="conversation-section page-column" id="contact" data-motion="chat"><h2>Start anywhere</h2>
+  return <><section className="contact-launcher page-column" id="contact" data-motion="copy">
+    <div className="contact-heading"><p>Have a project or question?</p><h2>Let’s talk</h2><span>Email or LinkedIn is the easiest way to reach me.</span></div>
+    <nav className="contact-primary-actions" aria-label="Contact Zahirul"><a href={`mailto:${EMAIL}`}>Email me <span aria-hidden="true">↗</span></a><a href={LINKEDIN} target="_blank" rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a></nav>
+    <p className="contact-virtual">Want a quick preview first? <button type="button" className="chat-launch-button" onClick={() => onActiveChange?.(true)} aria-haspopup="dialog" aria-controls="portfolio-chat">Explore through chat <span aria-hidden="true">↗</span></button></p>
+  </section>{renderChat && <section className={`conversation-section${closing ? " is-closing" : ""}`} id="portfolio-chat" role="dialog" aria-modal="true" aria-label="Conversation with Zahirul">
     <div className="chat-mobile-header">
-      <button type="button" className="chat-back" onClick={exitChat} aria-label="Back to portfolio">←</button>
+      <button ref={backRef} type="button" className="chat-back" onClick={exitChat} aria-label="Back to portfolio">←</button>
       <span className="chat-mobile-avatar-anchor" aria-hidden="true"><img src="/assets/zahirul/zahirul-head.png" alt=""/></span>
-      <button type="button" className="chat-mobile-identity" onClick={remindExit} aria-label="Zahirul Iman, usually replies quickly. Tap the back arrow to return to the portfolio."><strong>Zahirul Iman</strong><small>usually replies quickly</small></button>
-      {showExitHint && <span className="chat-exit-hint" role="status">Tap ← to return to the portfolio</span>}
+      <span className="chat-mobile-identity"><strong>Zahirul Iman</strong><small>{typing ? "typing…" : "online"}</small></span>
+      <a className="chat-header-email" href={`mailto:${EMAIL}`}>Email</a>
     </div>
     <div className="chat-shell">
     <div className="chat-transcript" aria-live="polite" aria-label="Conversation with Zahirul">
@@ -836,7 +936,7 @@ function Conversation({ mobileChatActive, onMobileModeChange }) {
             const action = CHAT_ACTIONS[key];
             if (action) {
               const external = action.href.startsWith("http");
-              return <a className="chat-choice" href={action.href} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined} key={key}>{action.label}<span aria-hidden="true">{external ? "↗" : "→"}</span></a>;
+              return <a className="chat-choice" href={action.href} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined} onClick={!external && action.href.startsWith("#") ? exitChat : undefined} key={key}>{action.label}<span aria-hidden="true">{external ? "↗" : "→"}</span></a>;
             }
             return <button type="button" className="chat-choice" onClick={() => choose(key)} key={key}>{CHAT_TOPICS[key].question}</button>;
           })}
@@ -844,7 +944,7 @@ function Conversation({ mobileChatActive, onMobileModeChange }) {
         </div>}
       </div>
     </div>
-  </div></section></>;
+  </div></section>}</>;
 }
 
 function DefinitionPage() { return <main className="definition-page page-column">
@@ -901,8 +1001,73 @@ function SmileyExperience() {
   </section><Footer/></main>;
 }
 
+function LoadingScreen({ onReveal, onComplete }) {
+  const [progress, setProgress] = useState(0);
+  const [exiting, setExiting] = useState(false);
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      setProgress(100);
+      onReveal();
+      onComplete();
+      return;
+    }
+
+    let cancelled = false;
+    const timers = new Set();
+    const schedule = (callback, delay) => {
+      const timer = window.setTimeout(callback, delay);
+      timers.add(timer);
+      return timer;
+    };
+    const start = Date.now();
+    const image = new Image();
+    const imageReady = new Promise(resolve => {
+      image.onload = resolve;
+      image.onerror = resolve;
+      image.src = "/assets/zahirul/zahirul-creative-tools.webp";
+      if (image.complete) resolve();
+    });
+    const fontsReady = document.fonts?.ready || Promise.resolve();
+    const safetyTimeout = new Promise(resolve => schedule(resolve, 2400));
+    const criticalReady = Promise.race([Promise.allSettled([imageReady, fontsReady]), safetyTimeout]);
+    const minimumDisplay = new Promise(resolve => schedule(resolve, 700));
+    const progressTimer = window.setInterval(() => {
+      setProgress(current => Math.min(92, current + Math.max(1, Math.ceil((92 - current) * .09))));
+    }, 42);
+
+    Promise.all([criticalReady, minimumDisplay]).then(() => {
+      if (cancelled) return;
+      window.clearInterval(progressTimer);
+      const elapsed = Date.now() - start;
+      setProgress(100);
+      schedule(() => {
+        if (cancelled) return;
+        setExiting(true);
+        onReveal();
+        schedule(() => {
+          if (!cancelled) onComplete();
+        }, 620);
+      }, elapsed < 820 ? 120 : 70);
+    });
+
+    return () => {
+      cancelled = true;
+      window.clearInterval(progressTimer);
+      timers.forEach(timer => window.clearTimeout(timer));
+    };
+  }, []);
+
+  return <div className={`loading-screen${exiting ? " is-exiting" : ""}`} role="progressbar" aria-label="Loading portfolio" aria-valuemin="0" aria-valuemax="100" aria-valuenow={progress}>
+    <strong className="loading-progress">{String(progress).padStart(2, "0")}<small>%</small></strong>
+  </div>;
+}
+
 function App() {
   const [route,setRoute]=useState(window.location.pathname.replace(/\/$/,"")||"/");
+  const [siteReady, setSiteReady] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
   useEffect(()=>{const sync=()=>{setRoute(window.location.pathname.replace(/\/$/,"")||"/");window.scrollTo(0,0)};window.addEventListener("popstate",sync);return()=>window.removeEventListener("popstate",sync)},[]);
   useEffect(()=>{
     if(route!=="/"||window.matchMedia("(prefers-reduced-motion: reduce)").matches||window.matchMedia("(pointer: coarse)").matches)return;
@@ -913,10 +1078,36 @@ function App() {
     frame=requestAnimationFrame(raf);
     return()=>{cancelAnimationFrame(frame);lenis.destroy();delete window.__portfolioSmoothScroll};
   },[route]);
-  useEffect(()=>{const titles={"/":"Zahirul Iman – Product Designer & Digital Product Builder","/product-design-engineer":"Product Design – Zahirul Iman","/playground":"Experiments – Zahirul Iman","/bookmarks":"Contact & Links – Zahirul Iman","/playground/infinite-gallery":"Infinite Gallery – Zahirul Iman","/playground/smiley":"Smiley – Zahirul Iman"};document.title=titles[route]||titles["/"]},[route]);
+  useEffect(()=>{
+    const siteUrl="https://zahiruliman.com";
+    const metadata={
+      "/":{title:"Zahirul Iman – Product Designer & Digital Product Builder",description:"Portfolio of Zahirul Iman, a Malaysia-based product designer and digital product builder working across product thinking, UI/UX, rapid prototyping, websites and practical digital systems."},
+      "/product-design-engineer":{title:"Product Design – Zahirul Iman",description:"How Zahirul Iman turns unclear requirements into useful product flows, interfaces and testable prototypes."},
+      "/playground":{title:"Experiments – Zahirul Iman",description:"Interactive product, interface and visual experiments by Zahirul Iman."},
+      "/bookmarks":{title:"Contact & Links – Zahirul Iman",description:"Contact Zahirul Iman through email, LinkedIn or Instagram."},
+      "/playground/infinite-gallery":{title:"Infinite Gallery – Zahirul Iman",description:"An interactive spatial gallery experiment by Zahirul Iman."},
+      "/playground/smiley":{title:"Smiley – Zahirul Iman",description:"A playful cursor and interaction experiment by Zahirul Iman."},
+    };
+    const current=metadata[route]||metadata["/"];
+    const canonical=`${siteUrl}${route==="/"?"":route}`;
+    document.title=current.title;
+    document.querySelector('meta[name="description"]')?.setAttribute("content",current.description);
+    document.querySelector('meta[property="og:title"]')?.setAttribute("content",current.title);
+    document.querySelector('meta[property="og:description"]')?.setAttribute("content",current.description);
+    document.querySelector('meta[property="og:url"]')?.setAttribute("content",canonical);
+    document.querySelector('meta[name="twitter:title"]')?.setAttribute("content",current.title);
+    document.querySelector('meta[name="twitter:description"]')?.setAttribute("content",current.description);
+    document.querySelector('link[rel="canonical"]')?.setAttribute("href",canonical);
+  },[route]);
   let page=<Home/>;
   if(route==="/product-design-engineer") page=<DefinitionPage/>; else if(route==="/playground") page=<Playground/>; else if(route==="/bookmarks") page=<Bookmarks/>; else if(route==="/playground/infinite-gallery") page=<InfiniteGallery/>; else if(route==="/playground/smiley") page=<SmileyExperience/>;
-  return <><SiteChrome route={route}/><div className="route-stage" key={route}>{page}</div></>;
+  return <div className={`site-frame ${siteReady ? "is-ready" : "is-loading"}`}>
+    <div className="site-content" aria-hidden={!siteReady} inert={!siteReady ? "" : undefined}>
+      <SiteChrome route={route}/>
+      <div className="route-stage" key={route}>{page}</div>
+    </div>
+    {showLoader && <LoadingScreen onReveal={() => setSiteReady(true)} onComplete={() => setShowLoader(false)}/>}
+  </div>;
 }
 
 export { App };

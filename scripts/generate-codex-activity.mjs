@@ -61,31 +61,34 @@ function buildHumanActivity({ startMonth, endProgress = 1, salt, chance }) {
   for (let cursor = new Date(Date.UTC(year, startMonth, 1)); cursor <= finalDate; cursor = new Date(cursor.getTime() + dayMs)) {
     const week = Math.floor((cursor - gridStart) / dayMs / 7);
     const weekday = cursor.getUTCDay();
+    const month = cursor.getUTCMonth();
     const progress = (cursor - yearStart) / (yearEnd - yearStart);
-    const count = chance({ weekday, week, progress, roll:seededRandom(week * 11 + weekday * 3 + salt) });
+    const count = chance({ weekday, week, month, progress, roll:seededRandom(week * 11 + weekday * 3 + salt) });
     if (count > 0) counts.set(cursor.toISOString().slice(0, 10), count);
   }
   return counts;
 }
 
 const claudeActivity = buildHumanActivity({
-  startMonth:1,
+  startMonth:0,
   salt:17,
-  chance:({ weekday, week, roll }) => {
-    const base = weekday === 0 || weekday === 6 ? .08 : .34;
+  chance:({ weekday, week, month, roll }) => {
+    const firstQuarter = month <= 2;
+    const base = firstQuarter
+      ? (weekday === 0 || weekday === 6 ? .09 : .42)
+      : (weekday === 0 || weekday === 6 ? .005 : .025);
     if (roll > base) return 0;
-    return roll < .06 || (week % 9 === 2 && roll < .2) ? 2 : 1;
+    return firstQuarter && (roll < .06 || (week % 9 === 2 && roll < .2)) ? 2 : 1;
   },
 });
 const antigravityActivity = buildHumanActivity({
   startMonth:0,
-  endProgress:.45,
   salt:41,
   chance:({ weekday, progress, roll }) => {
-    const phase = progress < .15 ? .35 : progress < .3 ? .22 : .1;
-    const weekendAdjustment = weekday === 0 || weekday === 6 ? -.12 : 0;
-    if (roll > phase + weekendAdjustment) return 0;
-    return roll < .045 ? 2 : 1;
+    const phase = progress < .2 ? .13 : progress < .65 ? .12 : .11;
+    const weekendAdjustment = weekday === 0 || weekday === 6 ? -.035 : 0;
+    if (roll > Math.max(.025, phase + weekendAdjustment)) return 0;
+    return roll < .025 ? 2 : 1;
   },
 });
 
