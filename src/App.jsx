@@ -273,11 +273,15 @@ function WorkReel({ items, label }) {
   const reelRef = useRef(null);
   const trackRef = useRef(null);
   const frameRef = useRef(0);
+  const wheelFrameRef = useRef(0);
+  const wheelIdleRef = useRef(0);
+  const wheelTargetRef = useRef(0);
   const offsetRef = useRef(0);
   const state = useRef({ start:0, origin:0, dragging:false, moved:false, lastX:0, lastTime:0, velocity:0 });
   const gesture = useRef({ x:0, y:0, moved:false, lastScroll:0 });
   const [offset, setOffset] = useState(0);
   const [dragging, setDragging] = useState(false);
+  const [wheelActive, setWheelActive] = useState(false);
   const [preview, setPreview] = useState(null);
   const clamp = (value) => {
     const columnWidth = Math.min(640, window.innerWidth - 32);
@@ -292,16 +296,66 @@ function WorkReel({ items, label }) {
     return next;
   };
   useEffect(() => {
-    const resize = () => moveTo(offsetRef.current);
+    const resize = () => {
+      wheelTargetRef.current = moveTo(offsetRef.current);
+    };
     const observer = new ResizeObserver(resize);
     if (trackRef.current) observer.observe(trackRef.current);
     window.addEventListener("resize", resize);
     resize();
     return () => {
       cancelAnimationFrame(frameRef.current);
+      cancelAnimationFrame(wheelFrameRef.current);
+      window.clearTimeout(wheelIdleRef.current);
       observer.disconnect();
       window.removeEventListener("resize", resize);
     };
+  }, [items.length]);
+  useEffect(() => {
+    const reel = reelRef.current;
+    if (!reel) return;
+
+    const settleWheel = () => {
+      const distance = wheelTargetRef.current - offsetRef.current;
+      if (Math.abs(distance) < .2) {
+        moveTo(wheelTargetRef.current);
+        wheelFrameRef.current = 0;
+        return;
+      }
+      moveTo(offsetRef.current + distance * .2);
+      wheelFrameRef.current = requestAnimationFrame(settleWheel);
+    };
+    const handleWheel = event => {
+      if (event.ctrlKey || window.matchMedia("(max-width: 900px), (pointer: coarse)").matches) return;
+      const rect = reel.getBoundingClientRect();
+      const crossesViewportFocus = rect.top < window.innerHeight * .72 && rect.bottom > window.innerHeight * .28;
+      if (!crossesViewportFocus) return;
+
+      const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1;
+      const rawDelta = (Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX) * unit;
+      if (Math.abs(rawDelta) < .5) return;
+
+      const delta = Math.sign(rawDelta) * Math.min(Math.abs(rawDelta), 180);
+      wheelTargetRef.current = clamp(wheelTargetRef.current);
+      const next = clamp(wheelTargetRef.current - delta);
+      if (Math.abs(next - wheelTargetRef.current) < .2) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      wheelTargetRef.current = next;
+      setWheelActive(true);
+      window.clearTimeout(wheelIdleRef.current);
+      wheelIdleRef.current = window.setTimeout(() => setWheelActive(false), 180);
+
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        moveTo(next);
+        return;
+      }
+      if (!wheelFrameRef.current) wheelFrameRef.current = requestAnimationFrame(settleWheel);
+    };
+
+    reel.addEventListener("wheel", handleWheel, { passive:false });
+    return () => reel.removeEventListener("wheel", handleWheel);
   }, [items.length]);
   const syncRatio = (event) => {
     const media = event.currentTarget;
@@ -313,6 +367,9 @@ function WorkReel({ items, label }) {
   const down = (event) => {
     if (window.matchMedia("(max-width: 900px), (pointer: coarse)").matches) return;
     cancelAnimationFrame(frameRef.current);
+    cancelAnimationFrame(wheelFrameRef.current);
+    wheelFrameRef.current = 0;
+    wheelTargetRef.current = offsetRef.current;
     state.current = { start:event.clientX, origin:offsetRef.current, dragging:true, moved:false, lastX:event.clientX, lastTime:performance.now(), velocity:0 };
     setDragging(true);
     event.currentTarget.setPointerCapture(event.pointerId);
@@ -325,7 +382,7 @@ function WorkReel({ items, label }) {
     state.current.velocity = ((event.clientX - state.current.lastX) / elapsed) * 16.67;
     state.current.lastX = event.clientX;
     state.current.lastTime = now;
-    moveTo(state.current.origin + event.clientX - state.current.start);
+    wheelTargetRef.current = moveTo(state.current.origin + event.clientX - state.current.start);
   };
   const release = (event, coast = true) => {
     if (!state.current.dragging) return;
@@ -339,6 +396,7 @@ function WorkReel({ items, label }) {
       if (Math.abs(state.current.velocity) < .12) return;
       const before = offsetRef.current;
       const after = moveTo(before + state.current.velocity);
+      wheelTargetRef.current = after;
       if (after === before) return;
       frameRef.current = requestAnimationFrame(glide);
     };
@@ -355,7 +413,7 @@ function WorkReel({ items, label }) {
     if (event.detail !== 0 && (gesture.current.moved || justScrolled)) return;
     setPreview(item);
   };
-  return <><section ref={reelRef} className={`work-reel${dragging ? " is-dragging" : ""}`} aria-label={label} aria-roledescription="carousel" data-motion="media" onPointerDownCapture={startGesture} onPointerMoveCapture={trackGesture} onScroll={() => { gesture.current.lastScroll = performance.now(); }}>
+  return <><section ref={reelRef} className={`work-reel${dragging ? " is-dragging" : ""}${wheelActive ? " is-wheel-scrolling" : ""}`} aria-label={label} aria-roledescription="carousel" data-motion="media" onPointerDownCapture={startGesture} onPointerMoveCapture={trackGesture} onScroll={() => { gesture.current.lastScroll = performance.now(); }}>
     <div ref={trackRef} className="work-track" style={{ transform: `translate3d(calc((100vw - min(640px, 100vw - 32px))/2 + ${offset}px),0,0)` }} onPointerDown={down} onPointerMove={move} onPointerUp={release} onPointerCancel={event => release(event, false)}>
       {items.map(item => {
         const normalized = Array.isArray(item) ? { tone:item[0], title:item[1], context:item[2] } : item;
