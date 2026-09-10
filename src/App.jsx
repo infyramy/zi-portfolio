@@ -9,6 +9,8 @@ const GITHUB = "https://github.com/zahiruliman";
 const INSTAGRAM = "https://www.instagram.com/zahirul.iman/";
 
 const workHighlights = [
+  { tone:"apricot", title:"Votafogo", context:"E-commerce · WordPress + WooCommerce" },
+  { tone:"mint", title:"Cikgu Kereta", context:"Website · UX/UI design" },
   { title:"Calm & Chaos", context:"Event platform · Web experience", media:"/assets/zahirul/calm-and-chaos-highlight.jpg", ratio:1.992, alt:"Calm & Chaos beach race event website interface" },
   { tone:"mint", title:"be.mobile", context:"Visual identity · UI design", media:"https://zi.0w0.my/assets/work/Be.mobile%20website.png" },
   { tone:"apricot", title:"Innogauge", context:"UI/UX · Analytical platform", media:"https://zi.0w0.my/assets/work/Innogauge.png" },
@@ -461,6 +463,7 @@ function CodexActivity() {
   const selected = tool === "all" ? null : tools[tool];
   const selectedActivity = selected ? codexActivity.tools[tool] : null;
   const total = Object.values(codexActivity.tools).reduce((sum, activity) => sum + activity.total, 0);
+  const activityUpdated = new Intl.DateTimeFormat("en-MY", { month:"long", year:"numeric", timeZone:"UTC" }).format(new Date(codexActivity.generatedAt));
   const combinedDays = codexActivity.tools.codex.days.map((day, index) => {
     const levels = Object.fromEntries(Object.keys(tools).map(key => [key, codexActivity.tools[key].days[index].level]));
     const counts = Object.fromEntries(Object.keys(tools).map(key => [key, codexActivity.tools[key].days[index].count]));
@@ -472,7 +475,7 @@ function CodexActivity() {
     <div className="codex-activity-head">
       <div>
         <h3 id="activity-tool-title">Building with AI tools</h3>
-        <p className="activity-description">{selected ? selected.source : "Recorded sessions across Codex, Claude Code and Antigravity"}</p>
+        <p className="activity-description">{selected ? selected.source : "Recorded sessions across Codex, Claude Code and Antigravity"} <span className="activity-updated">Updated through {activityUpdated}</span></p>
       </div>
       <p className="activity-total">{selected ? `${selectedActivity.total} sessions` : `${total} sessions`}</p>
     </div>
@@ -691,6 +694,8 @@ function PhotographyGear(){
 }
 
 function PastWork(){const [preview,setPreview]=useState(null);const items=[
+  {type:"Website",title:"Votafogo",description:"E-commerce restart; I am redesigning the WordPress and WooCommerce experience around a clearer shop journey.",href:"https://votafogo.com/"},
+  {type:"Website",title:"Cikgu Kereta",description:"Automotive education and service website; I shaped the information architecture, interface, and visual direction.",href:"https://cikgukereta.my/"},
   {type:"UX design",title:"Calm & Chaos",description:"Event booking web app; I focused on its UX and interface design.",href:"https://calmandchaos.asia/book"},
   {type:"Website",title:"The Tulip Wedding",description:"Wedding website; I worked across its content, design, and development.",href:"https://thetulipwedding.com/"},
   {type:"Campaign site",title:"Sunshine Raya Contest Submission",description:"Campaign entry website; I worked on its content, design, and development.",tone:"yellow"},
@@ -1160,7 +1165,7 @@ function App() {
   let page=<Home/>;
   if(route==="/product-design-engineer") page=<DefinitionPage/>; else if(route==="/playground") page=<Playground/>; else if(route==="/bookmarks") page=<Bookmarks/>; else if(route==="/playground/infinite-gallery") page=<InfiniteGallery/>; else if(route==="/playground/smiley") page=<SmileyExperience/>;
   return <div className={`site-frame ${siteReady ? "is-ready" : "is-loading"}`}>
-    <div className="site-content" aria-hidden={!siteReady} inert={!siteReady ? "" : undefined}>
+    <div className="site-content" aria-hidden={!siteReady} inert={!siteReady}>
       <SiteChrome route={route}/>
       <div className="route-stage" key={route}>{page}</div>
     </div>

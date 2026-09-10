@@ -403,6 +403,7 @@ strong{font-weight:var(--weight-heading);color:var(--ink)}
 .codex-activity-head{display:flex;align-items:flex-start;justify-content:space-between;gap:32px}
 .codex-activity-head h3{font-size:var(--text-secondary);line-height:1.35;font-weight:var(--weight-heading);letter-spacing:-.015em}
 .activity-description{max-width:46ch;margin-top:4px;color:var(--muted);font:var(--weight-body) var(--text-caption)/1.5 var(--font-sans);letter-spacing:-.005em;text-wrap:pretty}
+.activity-updated{display:block;color:var(--faint);font-size:var(--text-micro);letter-spacing:.01em}
 .activity-total{margin-top:2px;white-space:nowrap;color:var(--faint);font:400 var(--text-micro)/1.45 var(--font-mono)}
 .tool-option-mark{display:block;width:7px;height:7px;border-radius:2px;background:#2f4f39}
 .tool-option-claude .tool-option-mark,.tool-claude .tool-option-mark{background:#bd7440}
