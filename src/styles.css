@@ -1,5 +1,5 @@
-@font-face{font-family:Saans;src:url('/assets/fonts/SaansCollectionVF.woff2') format('woff2-variations');font-style:normal;font-weight:300 900;font-display:swap}
-@font-face{font-family:'Saans Mono';src:url('/assets/fonts/SaansMono-Regular.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:Saans;src:url('./assets/SaansCollectionVF.woff2') format('woff2-variations');font-style:normal;font-weight:300 900;font-display:swap}
+@font-face{font-family:'Saans Mono';src:url('./assets/SaansMono-Regular.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap}
 
 :root{
   --page:#fff;--ink:#171717;--copy:#404040;--muted:#737373;--faint:#a3a3a3;--line:#e5e5e5;--line-strong:#d4d4d4;

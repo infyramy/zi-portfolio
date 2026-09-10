@@ -184,7 +184,7 @@ function SiteChrome({ route }) {
             <div className="menu-actions"><a className="menu-primary-action" href={`mailto:${EMAIL}`}>Email me <span aria-hidden="true">↗</span></a><a href={LINKEDIN} target="_blank" rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a></div>
             <div className="menu-socials"><a href={INSTAGRAM} target="_blank" rel="noreferrer">Instagram</a><a href={GITHUB} target="_blank" rel="noreferrer">GitHub</a></div>
           </div>
-          <figure className="menu-illustration" aria-hidden="true"><img src="/assets/zahirul/zahirul-creative-tools.webp" alt=""/></figure>
+          <figure className="menu-illustration" aria-hidden="true"><img src="/assets/zahirul/zahirul-creative-tools.png" alt=""/></figure>
         </div>
       </div>
     </div>
@@ -657,7 +657,7 @@ function Home() {
     {cameraFlash > 0 && <span className="camera-flash" key={cameraFlash} aria-hidden="true" onAnimationEnd={() => setCameraFlash(0)}/>}
     <section className="home-intro page-column" id="introduction">
       <figure className="hero-illustration" ref={heroIllustrationRef}>
-        <img src="/assets/zahirul/zahirul-creative-tools.webp" width="1080" height="940" alt="Illustration of Zahirul at work with product design, visual design, AI, and photography tools" fetchPriority="high"/>
+        <img src="/assets/zahirul/zahirul-creative-tools.png" width="1080" height="940" alt="Illustration of Zahirul at work with product design, visual design, AI, and photography tools" fetchPriority="high"/>
       </figure>
       <h1>Hi, I&apos;m Zahirul Iman.<br/>Product Designer &amp; Digital Product Builder.</h1>
       <p>I work between product thinking, UI/UX, rapid prototyping, web, and systems, turning unclear ideas into something understandable, testable, and ready for the right people to build.</p>
@@ -1089,7 +1089,7 @@ function LoadingScreen({ onReveal, onComplete }) {
     const imageReady = new Promise(resolve => {
       image.onload = resolve;
       image.onerror = resolve;
-      image.src = "/assets/zahirul/zahirul-creative-tools.webp";
+      image.src = "/assets/zahirul/zahirul-creative-tools.png";
       if (image.complete) resolve();
     });
     const fontsReady = document.fonts?.ready || Promise.resolve();
